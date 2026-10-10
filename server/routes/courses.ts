@@ -5,20 +5,20 @@ import { AuthRequest, requireAuth } from '../middleware/auth';
 const router = Router();
 
 // GET /api/courses — public
-router.get('/', (_req, res: Response) => {
-  const rows = db.prepare('SELECT * FROM courses ORDER BY name').all();
-  res.json(rows);
+router.get('/', async (_req, res: Response) => {
+  const result = await db.execute('SELECT * FROM courses ORDER BY name');
+  res.json(result.rows);
 });
 
 // POST /api/courses — admin only
-router.post('/', requireAuth, (req: AuthRequest, res: Response) => {
+router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
   const { name } = req.body;
   if (!name || !name.trim()) return res.status(400).json({ error: 'Name is required' });
 
   try {
-    const result = db.prepare('INSERT INTO courses (name) VALUES (?)').run(name.trim());
-    const row = db.prepare('SELECT * FROM courses WHERE id = ?').get(result.lastInsertRowid);
-    res.status(201).json(row);
+    const result = await db.execute({ sql: 'INSERT INTO courses (name) VALUES (?)', args: [name.trim()] });
+    const rowResult = await db.execute({ sql: 'SELECT * FROM courses WHERE id = ?', args: [Number(result.lastInsertRowid)] });
+    res.status(201).json(rowResult.rows[0]);
   } catch (e: any) {
     if (e.message?.includes('UNIQUE')) {
       return res.status(409).json({ error: 'Course already exists' });
@@ -28,9 +28,9 @@ router.post('/', requireAuth, (req: AuthRequest, res: Response) => {
 });
 
 // DELETE /api/courses/:id — admin only
-router.delete('/:id', requireAuth, (req: AuthRequest, res: Response) => {
-  const result = db.prepare('DELETE FROM courses WHERE id = ?').run(req.params.id);
-  if (result.changes === 0) return res.status(404).json({ error: 'Course not found' });
+router.delete('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
+  const result = await db.execute({ sql: 'DELETE FROM courses WHERE id = ?', args: [Number(req.params.id)] });
+  if (result.rowsAffected === 0) return res.status(404).json({ error: 'Course not found' });
   res.json({ message: 'Course deleted' });
 });
 

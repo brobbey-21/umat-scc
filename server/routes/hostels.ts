@@ -5,20 +5,20 @@ import { AuthRequest, requireAuth } from '../middleware/auth';
 const router = Router();
 
 // GET /api/hostels — public
-router.get('/', (_req, res: Response) => {
-  const rows = db.prepare('SELECT * FROM hostels ORDER BY name').all();
-  res.json(rows);
+router.get('/', async (_req, res: Response) => {
+  const result = await db.execute('SELECT * FROM hostels ORDER BY name');
+  res.json(result.rows);
 });
 
 // POST /api/hostels — admin only
-router.post('/', requireAuth, (req: AuthRequest, res: Response) => {
+router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
   const { name } = req.body;
   if (!name || !name.trim()) return res.status(400).json({ error: 'Name is required' });
 
   try {
-    const result = db.prepare('INSERT INTO hostels (name) VALUES (?)').run(name.trim());
-    const row = db.prepare('SELECT * FROM hostels WHERE id = ?').get(result.lastInsertRowid);
-    res.status(201).json(row);
+    const result = await db.execute({ sql: 'INSERT INTO hostels (name) VALUES (?)', args: [name.trim()] });
+    const rowResult = await db.execute({ sql: 'SELECT * FROM hostels WHERE id = ?', args: [Number(result.lastInsertRowid)] });
+    res.status(201).json(rowResult.rows[0]);
   } catch (e: any) {
     if (e.message?.includes('UNIQUE')) {
       return res.status(409).json({ error: 'Hostel already exists' });
@@ -28,9 +28,9 @@ router.post('/', requireAuth, (req: AuthRequest, res: Response) => {
 });
 
 // DELETE /api/hostels/:id — admin only
-router.delete('/:id', requireAuth, (req: AuthRequest, res: Response) => {
-  const result = db.prepare('DELETE FROM hostels WHERE id = ?').run(req.params.id);
-  if (result.changes === 0) return res.status(404).json({ error: 'Hostel not found' });
+router.delete('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
+  const result = await db.execute({ sql: 'DELETE FROM hostels WHERE id = ?', args: [Number(req.params.id)] });
+  if (result.rowsAffected === 0) return res.status(404).json({ error: 'Hostel not found' });
   res.json({ message: 'Hostel deleted' });
 });
 

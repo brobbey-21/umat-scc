@@ -5,13 +5,13 @@ import { AuthRequest, requireAuth } from '../middleware/auth';
 const router = Router();
 
 // GET /api/denominations — public
-router.get('/', (_req, res: Response) => {
-  const rows = db.prepare('SELECT * FROM denominations').all();
-  res.json(rows);
+router.get('/', async (_req, res: Response) => {
+  const result = await db.execute('SELECT * FROM denominations');
+  res.json(result.rows);
 });
 
 // POST /api/denominations — admin only
-router.post('/', requireAuth, (req: AuthRequest, res: Response) => {
+router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
   const { id, name, campusFellowship, shortCode, color, accent, logoText, description, logoImage } = req.body;
 
   if (!name || !shortCode) {
@@ -21,21 +21,22 @@ router.post('/', requireAuth, (req: AuthRequest, res: Response) => {
   const denomId = id || shortCode.toLowerCase().replace(/[^a-z0-9]/g, '');
 
   try {
-    db.prepare(`
-      INSERT INTO denominations (id, name, campusFellowship, shortCode, color, accent, logoText, description, logoImage)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-    `).run(
-      denomId, name,
-      campusFellowship || name,
-      shortCode,
-      color || '#5C6861',
-      accent || '#8C9790',
-      logoText || shortCode.slice(0, 2).toUpperCase(),
-      description || '',
-      logoImage || null
-    );
-    const row = db.prepare('SELECT * FROM denominations WHERE id = ?').get(denomId);
-    res.status(201).json(row);
+    await db.execute({
+      sql: `INSERT INTO denominations (id, name, campusFellowship, shortCode, color, accent, logoText, description, logoImage)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      args: [
+        denomId, name,
+        campusFellowship || name,
+        shortCode,
+        color || '#5C6861',
+        accent || '#8C9790',
+        logoText || shortCode.slice(0, 2).toUpperCase(),
+        description || '',
+        logoImage || null
+      ],
+    });
+    const rowResult = await db.execute({ sql: 'SELECT * FROM denominations WHERE id = ?', args: [denomId] });
+    res.status(201).json(rowResult.rows[0]);
   } catch (e: any) {
     if (e.message?.includes('UNIQUE')) {
       return res.status(409).json({ error: 'Denomination already exists' });
@@ -45,49 +46,53 @@ router.post('/', requireAuth, (req: AuthRequest, res: Response) => {
 });
 
 // PUT /api/denominations/:id — admin only
-router.put('/:id', requireAuth, (req: AuthRequest, res: Response) => {
+router.put('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
   const { id } = req.params;
   const { name, campusFellowship, shortCode, color, accent, logoText, description, logoImage } = req.body;
 
-  const existing = db.prepare('SELECT * FROM denominations WHERE id = ?').get(id) as any;
+  const existingResult = await db.execute({ sql: 'SELECT * FROM denominations WHERE id = ?', args: [id] });
+  const existing = existingResult.rows[0] as any;
   if (!existing) return res.status(404).json({ error: 'Denomination not found' });
 
-  db.prepare(`
-    UPDATE denominations SET
+  await db.execute({
+    sql: `UPDATE denominations SET
       name = ?, campusFellowship = ?, shortCode = ?,
       color = ?, accent = ?, logoText = ?, description = ?,
       logoImage = ?
-    WHERE id = ?
-  `).run(
-    name ?? existing.name,
-    campusFellowship ?? existing.campusFellowship,
-    shortCode ?? existing.shortCode,
-    color ?? existing.color,
-    accent ?? existing.accent,
-    logoText ?? existing.logoText,
-    description ?? existing.description,
-    logoImage !== undefined ? logoImage : existing.logoImage,
-    id
-  );
+      WHERE id = ?`,
+    args: [
+      name ?? existing.name,
+      campusFellowship ?? existing.campusFellowship,
+      shortCode ?? existing.shortCode,
+      color ?? existing.color,
+      accent ?? existing.accent,
+      logoText ?? existing.logoText,
+      description ?? existing.description,
+      logoImage !== undefined ? logoImage : existing.logoImage,
+      id
+    ],
+  });
 
-  const row = db.prepare('SELECT * FROM denominations WHERE id = ?').get(id);
-  res.json(row);
+  const rowResult = await db.execute({ sql: 'SELECT * FROM denominations WHERE id = ?', args: [id] });
+  res.json(rowResult.rows[0]);
 });
 
 // DELETE /api/denominations/:id — admin only
-router.delete('/:id', requireAuth, (req: AuthRequest, res: Response) => {
-  const studentCount = db.prepare('SELECT COUNT(*) as c FROM students WHERE denominationId = ?').get(req.params.id) as any;
-  if (studentCount.c > 0) {
-    return res.status(409).json({ error: `Cannot delete: ${studentCount.c} students are registered under this fellowship` });
+router.delete('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
+  const studentCount = await db.execute({ sql: 'SELECT COUNT(*) as c FROM students WHERE denominationId = ?', args: [req.params.id] });
+  const studentC = Number(studentCount.rows[0].c);
+  if (studentC > 0) {
+    return res.status(409).json({ error: `Cannot delete: ${studentC} students are registered under this fellowship` });
   }
 
-  const adminCount = db.prepare('SELECT COUNT(*) as c FROM denomination_admins WHERE denominationId = ?').get(req.params.id) as any;
-  if (adminCount.c > 0) {
-    return res.status(409).json({ error: `Cannot delete: ${adminCount.c} admins are assigned to this fellowship` });
+  const adminCount = await db.execute({ sql: 'SELECT COUNT(*) as c FROM denomination_admins WHERE denominationId = ?', args: [req.params.id] });
+  const adminC = Number(adminCount.rows[0].c);
+  if (adminC > 0) {
+    return res.status(409).json({ error: `Cannot delete: ${adminC} admins are assigned to this fellowship` });
   }
 
-  const result = db.prepare('DELETE FROM denominations WHERE id = ?').run(req.params.id);
-  if (result.changes === 0) return res.status(404).json({ error: 'Denomination not found' });
+  const result = await db.execute({ sql: 'DELETE FROM denominations WHERE id = ?', args: [req.params.id] });
+  if (result.rowsAffected === 0) return res.status(404).json({ error: 'Denomination not found' });
   res.json({ message: 'Denomination deleted' });
 });
 

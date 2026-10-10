@@ -1,4 +1,4 @@
-import Database from 'better-sqlite3';
+import { createClient, type Client } from '@libsql/client';
 import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
@@ -6,23 +6,31 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const DB_PATH = path.join(__dirname, '..', 'data', 'scc.db');
-
-// Ensure data directory exists
-const dataDir = path.dirname(DB_PATH);
-if (!fs.existsSync(dataDir)) {
-  fs.mkdirSync(dataDir, { recursive: true });
+// Production (Vercel): connect to Turso. Local dev: use the on-disk SQLite file.
+const tursoUrl = process.env.TURSO_DATABASE_URL;
+if (process.env.VERCEL && !tursoUrl) {
+  throw new Error(
+    'TURSO_DATABASE_URL is not set. Create a Turso database and add TURSO_DATABASE_URL + TURSO_AUTH_TOKEN to your Vercel environment variables.'
+  );
 }
 
-const db = new Database(DB_PATH);
+const localDbPath = path.join(__dirname, '..', 'data', 'scc.db').replace(/\\/g, '/');
 
-// Enable WAL mode for better concurrency
-db.pragma('journal_mode = WAL');
-db.pragma('foreign_keys = ON');
+if (!tursoUrl) {
+  const dataDir = path.dirname(localDbPath);
+  if (!fs.existsSync(dataDir)) {
+    fs.mkdirSync(dataDir, { recursive: true });
+  }
+}
+
+const db: Client = createClient({
+  url: tursoUrl || `file:${localDbPath}`,
+  authToken: process.env.TURSO_AUTH_TOKEN,
+});
 
 // ── Schema ──────────────────────────────────────────────────────────────────
 
-db.exec(`
+await db.executeMultiple(`
   CREATE TABLE IF NOT EXISTS denominations (
     id TEXT PRIMARY KEY,
     name TEXT NOT NULL,
@@ -86,22 +94,22 @@ db.exec(`
 
 // ── Migrations: add columns to existing denominations table ────────────────
 
-function columnExists(table: string, column: string): boolean {
-  const cols = db.prepare(`PRAGMA table_info(${table})`).all() as { name: string }[];
-  return cols.some((c) => c.name === column);
+async function columnExists(table: string, column: string): Promise<boolean> {
+  const result = await db.execute(`PRAGMA table_info(${table})`);
+  return result.rows.some((c) => c.name === column);
 }
 
-if (!columnExists('denominations', 'accent')) {
-  db.exec(`ALTER TABLE denominations ADD COLUMN accent TEXT NOT NULL DEFAULT '#888888'`);
+if (!(await columnExists('denominations', 'accent'))) {
+  await db.executeMultiple(`ALTER TABLE denominations ADD COLUMN accent TEXT NOT NULL DEFAULT '#888888'`);
 }
-if (!columnExists('denominations', 'logoText')) {
-  db.exec(`ALTER TABLE denominations ADD COLUMN logoText TEXT NOT NULL DEFAULT ''`);
+if (!(await columnExists('denominations', 'logoText'))) {
+  await db.executeMultiple(`ALTER TABLE denominations ADD COLUMN logoText TEXT NOT NULL DEFAULT ''`);
 }
-if (!columnExists('denominations', 'logoImage')) {
-  db.exec(`ALTER TABLE denominations ADD COLUMN logoImage TEXT`);
+if (!(await columnExists('denominations', 'logoImage'))) {
+  await db.executeMultiple(`ALTER TABLE denominations ADD COLUMN logoImage TEXT`);
 }
 
-// ── Seed denominations (idempotent) ─────────────────────────────────────────
+// ── Seed denominations (replaces stale rows) ────────────────────────────────
 
 const SEED_DENOMINATIONS = [
   { id: 'agcm', name: 'Assemblies of God', campusFellowship: 'AGCM (Assemblies of God Campus Ministry)', shortCode: 'AGCM', color: '#C62828', accent: '#EF5350', logoText: 'AG', description: 'Assemblies of God campus branch, youth fellowship and dawn prayers.' },
@@ -119,29 +127,25 @@ const SEED_DENOMINATIONS = [
   { id: 'nuas', name: 'Anglican Church of Ghana', campusFellowship: 'NUAS (National Union of Anglican Students)', shortCode: 'NUAS', color: '#37474F', accent: '#78909C', logoText: 'NA', description: 'National Union of Anglican Students, liturgy, prayer book fellowship and chapel care.' },
 ];
 
-// ── Seed denominations (replaces stale rows) ────────────────────────────────
-
-// Remove old denominations that are no longer in the current list
 const validIds = SEED_DENOMINATIONS.map((d) => d.id);
-const allExisting = db.prepare('SELECT id FROM denominations').all() as { id: string }[];
-for (const row of allExisting) {
-  if (!validIds.includes(row.id)) {
-    db.prepare('DELETE FROM denominations WHERE id = ?').run(row.id);
+const allExisting = await db.execute('SELECT id FROM denominations');
+for (const row of allExisting.rows) {
+  if (!validIds.includes(String(row.id))) {
+    await db.execute({ sql: 'DELETE FROM denominations WHERE id = ?', args: [String(row.id)] });
   }
 }
 
-const seedDenoms = db.prepare(`
-  INSERT INTO denominations (id, name, campusFellowship, shortCode, color, accent, logoText, description)
-  VALUES (@id, @name, @campusFellowship, @shortCode, @color, @accent, @logoText, @description)
-  ON CONFLICT(id) DO UPDATE SET
-    name=excluded.name, campusFellowship=excluded.campusFellowship,
-    shortCode=excluded.shortCode, color=excluded.color,
-    accent=excluded.accent, logoText=excluded.logoText,
-    description=excluded.description
-`);
-
 for (const denom of SEED_DENOMINATIONS) {
-  seedDenoms.run(denom);
+  await db.execute({
+    sql: `INSERT INTO denominations (id, name, campusFellowship, shortCode, color, accent, logoText, description)
+          VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+          ON CONFLICT(id) DO UPDATE SET
+            name=excluded.name, campusFellowship=excluded.campusFellowship,
+            shortCode=excluded.shortCode, color=excluded.color,
+            accent=excluded.accent, logoText=excluded.logoText,
+            description=excluded.description`,
+    args: [denom.id, denom.name, denom.campusFellowship, denom.shortCode, denom.color, denom.accent, denom.logoText, denom.description],
+  });
 }
 
 // ── Seed hostels and courses (idempotent) ───────────────────────────────────
@@ -196,19 +200,20 @@ const SEED_COURSES = [
   'Electrical and Electronic Engineering — Top-up'
 ];
 
-const seedHostel = db.prepare('INSERT OR IGNORE INTO hostels (name) VALUES (?)');
-for (const h of SEED_HOSTELS) seedHostel.run(h);
+for (const h of SEED_HOSTELS) {
+  await db.execute({ sql: 'INSERT OR IGNORE INTO hostels (name) VALUES (?)', args: [h] });
+}
 
-// Remove old courses not in the new list, then seed new ones
 const validCourseNames = new Set(SEED_COURSES);
-const allCourses = db.prepare('SELECT id, name FROM courses').all() as { id: number; name: string }[];
-for (const c of allCourses) {
-  if (!validCourseNames.has(c.name)) {
-    db.prepare('DELETE FROM courses WHERE id = ?').run(c.id);
+const allCourses = await db.execute('SELECT id, name FROM courses');
+for (const c of allCourses.rows) {
+  if (!validCourseNames.has(String(c.name))) {
+    await db.execute({ sql: 'DELETE FROM courses WHERE id = ?', args: [Number(c.id)] });
   }
 }
 
-const seedCourse = db.prepare('INSERT OR IGNORE INTO courses (name) VALUES (?)');
-for (const c of SEED_COURSES) seedCourse.run(c);
+for (const c of SEED_COURSES) {
+  await db.execute({ sql: 'INSERT OR IGNORE INTO courses (name) VALUES (?)', args: [c] });
+}
 
 export default db;

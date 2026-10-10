@@ -25,8 +25,14 @@ import { DenominationManagement } from './components/DenominationManagement';
 import { ReferenceDataManager } from './components/ReferenceDataManager';
 
 export default function App() {
-  const [currentTab, setCurrentTab] = useState<MainNavTab>('landing');
-  const [adminView, setAdminView] = useState<AdminView>('dashboard');
+  const [currentTab, setCurrentTab] = useState<MainNavTab>(() => {
+    const saved = sessionStorage.getItem('scc-tab');
+    return (saved === 'register' || saved === 'admin' || saved === 'landing') ? saved : 'landing';
+  });
+  const [adminView, setAdminView] = useState<AdminView>(() => {
+    const saved = sessionStorage.getItem('scc-admin-view');
+    return (saved === 'dashboard' || saved === 'students' || saved === 'admins' || saved === 'denominations' || saved === 'reference') ? saved : 'dashboard';
+  });
   const [isAdmin, setIsAdmin] = useState<boolean>(() => isAuthenticated());
   const [students, setStudents] = useState<StudentRegistration[]>([]);
   const [admins, setAdmins] = useState<DenominationAdmin[]>([]);
@@ -42,6 +48,15 @@ export default function App() {
     setRegistrationDenomId(denominationId);
     setCurrentTab('register');
   }, []);
+
+  // Persist active page across refreshes
+  useEffect(() => {
+    sessionStorage.setItem('scc-tab', currentTab);
+  }, [currentTab]);
+
+  useEffect(() => {
+    sessionStorage.setItem('scc-admin-view', adminView);
+  }, [adminView]);
 
   // Initial load
   useEffect(() => {
