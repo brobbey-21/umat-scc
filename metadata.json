@@ -1,0 +1,6 @@
+{
+  "name": "Sanctuary Ledger",
+  "description": "Dignified member registration, pastoral directory, and ministry ledger for Student Christian Counsel (SCC).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

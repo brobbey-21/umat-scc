@@ -1,0 +1,256 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+  --font-heading: "Manrope", system-ui, -apple-system, sans-serif;
+}
+
+:root {
+  --bg-ground: #F9F9F6;
+  --color-primary: #1B3B2B;
+  --color-secondary: #2E7D56;
+  --color-gold: #C59B4B;
+  --color-border: #E2E5DC;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: 16px;
+  background-color: #F9F9F6;
+  color: #18221D;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Tactile gentle ambient shadows */
+.shadow-sanctuary-sm {
+  box-shadow: 0 1px 3px rgba(27, 59, 43, 0.05), 0 4px 12px rgba(27, 59, 43, 0.02);
+}
+
+.shadow-sanctuary-md {
+  box-shadow: 0 4px 16px rgba(27, 59, 43, 0.08), 0 2px 6px rgba(27, 59, 43, 0.03);
+}
+
+.shadow-sanctuary-lg {
+  box-shadow: 0 12px 32px rgba(24, 34, 29, 0.12), 0 4px 12px rgba(24, 34, 29, 0.06);
+}
+
+/* Entrance fade for toasts, modals, and form phases */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.22s ease-out both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-fade-in {
+    animation: none;
+  }
+}
+
+/* How-it-works cards: scroll reveal */
+@keyframes reveal-up {
+  from {
+    opacity: 0;
+    transform: translateY(28px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal-up {
+  animation: reveal-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Scroll-reveal for landing panels */
+[data-reveal] {
+  opacity: 0;
+}
+
+[data-reveal].is-revealed {
+  animation: reveal-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* Orbiting fellowship logos on the landing page */
+@keyframes orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes orbit-spin-rev {
+  to {
+    transform: rotate(-360deg);
+  }
+}
+
+@keyframes orbit-badge-cw {
+  from {
+    transform: translate(-50%, -50%) rotate(var(--counter, 0deg));
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(calc(var(--counter, 0deg) - 360deg));
+  }
+}
+
+@keyframes orbit-badge-ccw {
+  from {
+    transform: translate(-50%, -50%) rotate(var(--counter, 0deg));
+  }
+  to {
+    transform: translate(-50%, -50%) rotate(calc(var(--counter, 0deg) + 360deg));
+  }
+}
+
+.orbit-ring-cw {
+  animation: orbit-spin linear infinite;
+}
+
+.orbit-ring-ccw {
+  animation: orbit-spin-rev linear infinite;
+}
+
+.orbit-badge {
+  position: absolute;
+  transform: translate(-50%, -50%) rotate(var(--counter, 0deg));
+}
+
+.orbit-badge-cw {
+  animation: orbit-badge-cw linear infinite;
+}
+
+.orbit-badge-ccw {
+  animation: orbit-badge-ccw linear infinite;
+}
+
+.orbit-stage {
+  --chip: 46px;
+  --r-outer: 120px;
+  --r-inner: 70px;
+  --center: 76px;
+  width: 300px;
+  height: 300px;
+}
+
+@media (min-width: 768px) {
+  .orbit-stage {
+    --chip: 64px;
+    --r-outer: 240px;
+    --r-inner: 138px;
+    --center: 136px;
+    width: 560px;
+    height: 560px;
+  }
+}
+
+/* Stacked-panel landing: layer separation shadow */
+.panel-lift {
+  box-shadow: 0 -18px 50px rgba(11, 21, 16, 0.18);
+}
+
+/* Scroll depth effect: covered panels scale + dim */
+[data-stack-inner] {
+  will-change: transform, opacity;
+}
+
+/* Film-grain texture for photo panels */
+.grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+}
+
+/* iOS-style select: hide native arrow, draw soft chevron */
+.select-ios {
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%235C6861' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  background-size: 14px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .orbit-ring-cw,
+  .orbit-ring-ccw,
+  .orbit-badge-cw,
+  .orbit-badge-ccw {
+    animation: none;
+  }
+
+  .reveal-up {
+    animation: none;
+  }
+
+  [data-reveal] {
+    opacity: 1;
+  }
+
+  [data-reveal].is-revealed {
+    animation: none;
+  }
+}
+
+/* Subtle cinematic image motion (Ken Burns effect) */
+@keyframes kenburns-slow {
+  0% {
+    transform: scale(1.02) translate(0%, 0%);
+  }
+  50% {
+    transform: scale(1.10) translate(-1%, -1%);
+  }
+  100% {
+    transform: scale(1.03) translate(1%, 0.5%);
+  }
+}
+
+.animate-image-motion {
+  animation: kenburns-slow 28s ease-in-out infinite alternate;
+}
+
+/* Solder border effect blending with background */
+.border-solder {
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+.border-solder:hover {
+  border-color: rgba(197, 155, 75, 0.7);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #F3F4EE;
+}
+::-webkit-scrollbar-thumb {
+  background: #C1C8C2;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #8C9790;
+}
+
+/* Print styles for official slip */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #FFFFFF !important;
+  }
+}
