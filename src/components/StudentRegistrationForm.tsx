@@ -82,8 +82,6 @@ export const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = (
   const [selectedDenominationId, setSelectedDenominationId] = useState(
     initialDenominationId || denominations[0]?.id || ''
   );
-  const [homeParishOrCity, setHomeParishOrCity] = useState('');
-  const [prayerRequestOrNotes, setPrayerRequestOrNotes] = useState('');
 
   // Result state
   const [submittedStudent, setSubmittedStudent] = useState<StudentRegistration | null>(null);
@@ -156,8 +154,6 @@ export const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = (
       denominationId: denom.id,
       denominationName: denom.name,
       fellowshipCode: denom.shortCode,
-      homeParishOrCity: homeParishOrCity.trim() || undefined,
-      prayerRequestOrNotes: prayerRequestOrNotes.trim() || undefined,
       registeredAt: new Date().toISOString(),
       outreachStatus: 'New / Pending',
       outreachNotes: []
@@ -173,8 +169,6 @@ export const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = (
     setRoomOrBlock('');
     setCustomHostelText('');
     setIsCustomHostel(false);
-    setHomeParishOrCity('');
-    setPrayerRequestOrNotes('');
     setSubmittedStudent(null);
     setCurrentPhase(1);
   };
@@ -648,35 +642,6 @@ export const StudentRegistrationForm: React.FC<StudentRegistrationFormProps> = (
                   </button>
                 );
               })}
-            </div>
-
-            {/* Home Parish & Message */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium text-[#141414]">
-                  Home Town or Parish (Optional)
-                </label>
-                <input
-                  type="text"
-                  value={homeParishOrCity}
-                  onChange={(e) => setHomeParishOrCity(e.target.value)}
-                  placeholder="e.g. Calvary Society, Kumasi"
-                  className={`${INPUT} h-11`}
-                />
-              </div>
-
-              <div className="space-y-1.5">
-                <label className="text-sm font-medium text-[#141414]">
-                  Any prayer request or note? (Optional)
-                </label>
-                <input
-                  type="text"
-                  value={prayerRequestOrNotes}
-                  onChange={(e) => setPrayerRequestOrNotes(e.target.value)}
-                  placeholder="e.g. Need campus directions, join choir..."
-                  className={`${INPUT} h-11`}
-                />
-              </div>
             </div>
 
             {/* Final Confirmation Review Box */}

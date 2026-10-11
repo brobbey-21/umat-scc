@@ -28,6 +28,11 @@ const db: Client = createClient({
   authToken: process.env.TURSO_AUTH_TOKEN,
 });
 
+// All schema/migration/seed work below runs at import time. A failure here
+// (e.g. dead Turso token, wrong URL) must NOT crash the serverless function —
+// it is logged and every query will then fail with a readable JSON 500.
+try {
+
 // ── Schema ──────────────────────────────────────────────────────────────────
 
 await db.executeMultiple(`
@@ -214,6 +219,10 @@ for (const c of allCourses.rows) {
 
 for (const c of SEED_COURSES) {
   await db.execute({ sql: 'INSERT OR IGNORE INTO courses (name) VALUES (?)', args: [c] });
+}
+
+} catch (e) {
+  console.error('DB initialization failed:', e);
 }
 
 export default db;

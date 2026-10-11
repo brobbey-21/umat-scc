@@ -134,12 +134,13 @@ body {
 }
 
 .orbit-stage {
-  --chip: clamp(54px, 15vw, 64px);
-  --r-outer: min(132px, calc((100vw - 3.5rem) / 2 - var(--chip) / 2));
+  --chip: clamp(46px, 12vw, 64px);
+  --r-outer: min(120px, calc((100vw - 2.5rem) / 2 - var(--chip) / 2 - 2px));
   --r-inner: calc(var(--r-outer) * 0.58);
   --center: calc(var(--r-inner) * 1.15);
   width: calc(var(--r-outer) * 2 + var(--chip) + 8px);
   height: calc(var(--r-outer) * 2 + var(--chip) + 8px);
+  max-width: 100%;
 }
 
 @media (min-width: 768px) {

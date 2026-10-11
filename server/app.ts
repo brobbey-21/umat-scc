@@ -1,6 +1,7 @@
 import { config } from 'dotenv';
 config({ path: ['.env.local', '.env'] });
 import express from 'express';
+import db from './db';
 import authRoutes from './routes/auth';
 import studentRoutes from './routes/students';
 import adminRoutes from './routes/admins';
@@ -34,9 +35,23 @@ app.use('/api/denominations', denominationRoutes);
 app.use('/api/hostels', hostelRoutes);
 app.use('/api/courses', courseRoutes);
 
-// Health check
-app.get('/api/health', (_req, res) => {
-  res.json({ status: 'ok', timestamp: new Date().toISOString() });
+// Health check — pings the database so misconfiguration is visible here
+
+app.get('/api/health', async (_req, res) => {
+  try {
+    await db.execute('SELECT 1');
+    res.json({ status: 'ok', database: 'connected', timestamp: new Date().toISOString() });
+  } catch (e: any) {
+    res.status(503).json({ status: 'error', database: e?.message || 'unreachable', timestamp: new Date().toISOString() });
+  }
+});
+
+// JSON error handler — surface real errors (e.g. Turso auth failures) instead
+// of an opaque 500
+app.use((err: any, _req: any, res: any, _next: any) => {
+  console.error('API error:', err);
+  if (res.headersSent) return;
+  res.status(500).json({ error: err?.message || 'Internal server error' });
 });
 
 export default app;
