@@ -6,32 +6,32 @@
 }
 
 :root {
-  --bg-ground: #F9F9F6;
-  --color-primary: #1B3B2B;
-  --color-secondary: #2E7D56;
-  --color-gold: #C59B4B;
-  --color-border: #E2E5DC;
+  --bg-ground: #fbfbf9;
+  --color-primary: #141414;
+  --color-secondary: #141414;
+  --color-gold: #f5e11d;
+  --color-border: #e6e6e0;
 }
 
 body {
   font-family: var(--font-sans);
   font-size: 16px;
-  background-color: #F9F9F6;
-  color: #18221D;
+  background-color: #fbfbf9;
+  color: #141414;
   -webkit-font-smoothing: antialiased;
 }
 
 /* Tactile gentle ambient shadows */
 .shadow-sanctuary-sm {
-  box-shadow: 0 1px 3px rgba(27, 59, 43, 0.05), 0 4px 12px rgba(27, 59, 43, 0.02);
+  box-shadow: 0 1px 3px rgba(20,20,20, 0.05), 0 4px 12px rgba(20,20,20, 0.02);
 }
 
 .shadow-sanctuary-md {
-  box-shadow: 0 4px 16px rgba(27, 59, 43, 0.08), 0 2px 6px rgba(27, 59, 43, 0.03);
+  box-shadow: 0 4px 16px rgba(20,20,20, 0.08), 0 2px 6px rgba(20,20,20, 0.03);
 }
 
 .shadow-sanctuary-lg {
-  box-shadow: 0 12px 32px rgba(24, 34, 29, 0.12), 0 4px 12px rgba(24, 34, 29, 0.06);
+  box-shadow: 0 12px 32px rgba(20,20,20, 0.12), 0 4px 12px rgba(20,20,20, 0.06);
 }
 
 /* Entrance fade for toasts, modals, and form phases */
@@ -134,12 +134,12 @@ body {
 }
 
 .orbit-stage {
-  --chip: 46px;
-  --r-outer: 120px;
-  --r-inner: 70px;
-  --center: 76px;
-  width: 300px;
-  height: 300px;
+  --chip: clamp(54px, 15vw, 64px);
+  --r-outer: min(132px, calc((100vw - 3.5rem) / 2 - var(--chip) / 2));
+  --r-inner: calc(var(--r-outer) * 0.58);
+  --center: calc(var(--r-inner) * 1.15);
+  width: calc(var(--r-outer) * 2 + var(--chip) + 8px);
+  height: calc(var(--r-outer) * 2 + var(--chip) + 8px);
 }
 
 @media (min-width: 768px) {
@@ -155,7 +155,7 @@ body {
 
 /* Stacked-panel landing: layer separation shadow */
 .panel-lift {
-  box-shadow: 0 -18px 50px rgba(11, 21, 16, 0.18);
+  box-shadow: 0 -18px 50px rgba(10,10,10, 0.18);
 }
 
 /* Scroll depth effect: covered panels scale + dim */
@@ -225,7 +225,7 @@ body {
   -webkit-backdrop-filter: blur(12px);
 }
 .border-solder:hover {
-  border-color: rgba(197, 155, 75, 0.7);
+  border-color: rgba(245,225,29,0.8);
   background: rgba(255, 255, 255, 0.14);
 }
 
@@ -235,14 +235,14 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #F3F4EE;
+  background: #f4f4ee;
 }
 ::-webkit-scrollbar-thumb {
-  background: #C1C8C2;
+  background: #c6c6be;
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #8C9790;
+  background: #9b9b93;
 }
 
 /* Print styles for official slip */

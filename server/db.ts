@@ -151,19 +151,19 @@ for (const denom of SEED_DENOMINATIONS) {
 // ── Seed hostels and courses (idempotent) ───────────────────────────────────
 
 const SEED_HOSTELS = [
-  'University Hall (Katanga)',
-  'Unity Hall (Continental / Conti)',
-  'Independence Hall',
-  'Gold Refinery Hostel',
-  'Chancellor Hall',
-  'Queen Elizabeth Hall',
-  'West End Private Hostel',
-  'Grace Villa Hostel',
-  'Peace Hostel (Off-Campus)',
-  'Premier Hostel',
-  'Royal Gate Hostel',
-  'Non-Resident / Commuter from town'
+  'KT Hall',
+  'Chambers',
+  'Gold Hall'
 ];
+
+// Remove hostels that are no longer in the current list, then seed
+const validHostelNames = new Set(SEED_HOSTELS);
+const allHostels = await db.execute('SELECT id, name FROM hostels');
+for (const h of allHostels.rows) {
+  if (!validHostelNames.has(String(h.name))) {
+    await db.execute({ sql: 'DELETE FROM hostels WHERE id = ?', args: [Number(h.id)] });
+  }
+}
 
 const SEED_COURSES = [
   'Mining Engineering',
@@ -196,8 +196,8 @@ const SEED_COURSES = [
   'Transport Planning and Management',
   'Mathematics with Finance',
   'Engineering Mathematics',
-  'Mechanical Engineering — Top-up',
-  'Electrical and Electronic Engineering — Top-up'
+  'Mechanical Engineering - Top-up',
+  'Electrical and Electronic Engineering - Top-up'
 ];
 
 for (const h of SEED_HOSTELS) {

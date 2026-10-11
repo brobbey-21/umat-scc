@@ -40,21 +40,21 @@ export const Sidebar: React.FC<SidebarProps> = ({
   ];
 
   return (
-    <aside className="w-60 lg:w-64 shrink-0 bg-[#1B3B2B] text-white flex flex-col min-h-screen sticky top-0">
+    <aside className="w-60 lg:w-64 shrink-0 bg-[#141414] text-white flex flex-col min-h-screen sticky top-0">
       {/* Brand */}
       <button
         onClick={() => onChangeTab('landing')}
         className="p-5 text-left border-b border-white/10 hover:bg-white/5 transition-colors cursor-pointer"
       >
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center text-[#C59B4B] shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center text-[#f5e11d] shrink-0">
             <Church className="w-5 h-5" />
           </div>
           <div className="min-w-0">
             <span className="font-heading text-lg font-semibold tracking-tight text-white block leading-tight">
               SCC
             </span>
-            <span className="text-[10px] uppercase tracking-[0.1em] text-[#C59B4B] font-semibold block">
+            <span className="text-[10px] uppercase tracking-[0.1em] text-[#f5e11d] font-semibold block">
               Admin Portal
             </span>
           </div>
@@ -82,12 +82,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-white/60 hover:text-white hover:bg-white/6'
                   }`}
                 >
-                  <span className={isActive ? 'text-[#C59B4B]' : 'text-white/40'}>
+                  <span className={isActive ? 'text-[#f5e11d]' : 'text-white/40'}>
                     {item.icon}
                   </span>
                   <span>{item.label}</span>
                   {item.badge !== undefined && (
-                    <span className="ml-auto text-[10px] font-mono font-bold bg-[#C59B4B]/20 text-[#C59B4B] px-1.5 py-0.2 rounded-full">
+                    <span className="ml-auto text-[10px] font-mono font-bold bg-[#f5e11d]/20 text-[#f5e11d] px-1.5 py-0.2 rounded-full">
                       {item.badge}
                     </span>
                   )}
@@ -112,7 +112,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                       : 'text-white/60 hover:text-white hover:bg-white/6'
                   }`}
                 >
-                  <span className={isActive ? 'text-[#C59B4B]' : 'text-white/40'}>
+                  <span className={isActive ? 'text-[#f5e11d]' : 'text-white/40'}>
                     {item.icon}
                   </span>
                   <span>{item.label}</span>

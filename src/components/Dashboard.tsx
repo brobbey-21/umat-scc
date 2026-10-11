@@ -51,15 +51,15 @@ export const Dashboard: React.FC<DashboardProps> = ({
       label: 'Total Students',
       value: students.length,
       icon: <Users className="w-5 h-5" />,
-      color: '#1B3B2B',
-      bg: '#EDF7F1',
+      color: '#141414',
+      bg: '#f8f8f2',
     },
     {
       label: 'Admin Reps',
       value: admins.length,
       icon: <UserCheck className="w-5 h-5" />,
-      color: '#8A6218',
-      bg: '#FCF6E9',
+      color: '#7e6f00',
+      bg: '#fffbe0',
     },
     {
       label: 'Fellowships',
@@ -79,16 +79,16 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
   const statusMeta: { key: keyof typeof stats.statusCounts; label: string; color: string }[] = [
     { key: 'Added to Fellowship Group', label: 'Added to Fellowship', color: '#2E7D32' },
-    { key: 'Hostel Visited', label: 'Hostel Visited', color: '#8A6218' },
-    { key: 'Contacted & Welcomed', label: 'Contacted', color: '#1B3B2B' },
-    { key: 'New / Pending', label: 'New / Pending', color: '#8C9790' },
+    { key: 'Hostel Visited', label: 'Hostel Visited', color: '#7e6f00' },
+    { key: 'Contacted & Welcomed', label: 'Contacted', color: '#141414' },
+    { key: 'New / Pending', label: 'New / Pending', color: '#9b9b93' },
   ];
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="font-heading text-3xl font-bold text-[#18221D]">Dashboard</h2>
-        <p className="text-sm text-[#5C6861]">Overview of the SCC campus registry.</p>
+        <h2 className="font-heading text-3xl font-bold text-[#141414]">Dashboard</h2>
+        <p className="text-sm text-[#61615b]">Overview of the SCC campus registry.</p>
       </div>
 
       {/* Stat Cards */}
@@ -96,7 +96,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
         {cards.map((card) => (
           <div
             key={card.label}
-            className="bg-white border border-[#E2E5DC] rounded-xl p-5 shadow-sanctuary-sm"
+            className="bg-white border border-[#e6e6e0] rounded-xl p-5 shadow-sanctuary-sm"
           >
             <div
               className="w-10 h-10 rounded-xl flex items-center justify-center mb-3"
@@ -104,20 +104,20 @@ export const Dashboard: React.FC<DashboardProps> = ({
             >
               {card.icon}
             </div>
-            <div className="font-heading text-3xl font-bold text-[#18221D] tabular-nums">
+            <div className="font-heading text-3xl font-bold text-[#141414] tabular-nums">
               {card.value}
             </div>
-            <div className="text-xs text-[#5C6861] mt-1">{card.label}</div>
+            <div className="text-xs text-[#61615b] mt-1">{card.label}</div>
           </div>
         ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Outreach Progress */}
-        <div className="bg-white border border-[#E2E5DC] rounded-xl p-5 shadow-sanctuary-sm space-y-4">
+        <div className="bg-white border border-[#e6e6e0] rounded-xl p-5 shadow-sanctuary-sm space-y-4">
           <div className="flex items-center gap-2">
-            <TrendingUp className="w-4 h-4 text-[#2E7D56]" />
-            <h3 className="font-heading text-lg font-semibold text-[#18221D]">Outreach Progress</h3>
+            <TrendingUp className="w-4 h-4 text-[#141414]" />
+            <h3 className="font-heading text-lg font-semibold text-[#141414]">Outreach Progress</h3>
           </div>
           <div className="space-y-3">
             {statusMeta.map((s) => {
@@ -126,10 +126,10 @@ export const Dashboard: React.FC<DashboardProps> = ({
               return (
                 <div key={s.key} className="space-y-1">
                   <div className="flex items-center justify-between text-xs">
-                    <span className="font-semibold text-[#18221D]">{s.label}</span>
-                    <span className="text-[#5C6861] tabular-nums">{count} ({pct}%)</span>
+                    <span className="font-semibold text-[#141414]">{s.label}</span>
+                    <span className="text-[#61615b] tabular-nums">{count} ({pct}%)</span>
                   </div>
-                  <div className="h-2 bg-[#F3F4EE] rounded-full overflow-hidden">
+                  <div className="h-2 bg-[#f4f4ee] rounded-full overflow-hidden">
                     <div
                       className="h-full rounded-full transition-all"
                       style={{ width: `${pct}%`, backgroundColor: s.color }}
@@ -142,40 +142,40 @@ export const Dashboard: React.FC<DashboardProps> = ({
         </div>
 
         {/* Top Halls */}
-        <div className="bg-white border border-[#E2E5DC] rounded-xl p-5 shadow-sanctuary-sm space-y-4">
+        <div className="bg-white border border-[#e6e6e0] rounded-xl p-5 shadow-sanctuary-sm space-y-4">
           <div className="flex items-center gap-2">
-            <Home className="w-4 h-4 text-[#8A6218]" />
-            <h3 className="font-heading text-lg font-semibold text-[#18221D]">Top Halls & Hostels</h3>
+            <Home className="w-4 h-4 text-[#7e6f00]" />
+            <h3 className="font-heading text-lg font-semibold text-[#141414]">Top Halls & Hostels</h3>
           </div>
           <div className="space-y-2">
             {stats.topHalls.map(([hall, count], i) => (
-              <div key={hall} className="flex items-center justify-between text-xs py-1.5 border-b border-[#EEF2EF] last:border-0">
+              <div key={hall} className="flex items-center justify-between text-xs py-1.5 border-b border-[#f0f0ea] last:border-0">
                 <div className="flex items-center gap-2">
-                  <span className="w-5 h-5 rounded-full bg-[#F3F4EE] text-[#5C6861] flex items-center justify-center text-[10px] font-bold">
+                  <span className="w-5 h-5 rounded-full bg-[#f4f4ee] text-[#61615b] flex items-center justify-center text-[10px] font-bold">
                     {i + 1}
                   </span>
-                  <span className="text-[#18221D] font-semibold">{hall}</span>
+                  <span className="text-[#141414] font-semibold">{hall}</span>
                 </div>
-                <span className="font-mono font-bold text-[#1B3B2B]">{count}</span>
+                <span className="font-mono font-bold text-[#141414]">{count}</span>
               </div>
             ))}
             {stats.topHalls.length === 0 && (
-              <p className="text-xs text-[#5C6861] text-center py-4">No students yet.</p>
+              <p className="text-xs text-[#61615b] text-center py-4">No students yet.</p>
             )}
           </div>
         </div>
       </div>
 
       {/* Fellowship Distribution */}
-      <div className="bg-white border border-[#E2E5DC] rounded-xl p-5 shadow-sanctuary-sm space-y-4">
+      <div className="bg-white border border-[#e6e6e0] rounded-xl p-5 shadow-sanctuary-sm space-y-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <Church className="w-4 h-4 text-[#1565C0]" />
-            <h3 className="font-heading text-lg font-semibold text-[#18221D]">Fellowship Distribution</h3>
+            <h3 className="font-heading text-lg font-semibold text-[#141414]">Fellowship Distribution</h3>
           </div>
           <button
             onClick={() => onNavigate('denominations')}
-            className="text-xs font-semibold text-[#2E7D56] hover:underline"
+            className="text-xs font-semibold text-[#141414] hover:underline"
           >
             Manage Denominations →
           </button>
@@ -184,12 +184,12 @@ export const Dashboard: React.FC<DashboardProps> = ({
           {stats.denomCounts.map((d) => (
             <div
               key={d.id}
-              className="flex items-center gap-3 p-3 rounded-xl border border-[#E2E5DC] hover:border-[#BEE5CE] hover:bg-[#F9F9F6] transition-colors"
+              className="flex items-center gap-3 p-3 rounded-xl border border-[#e6e6e0] hover:border-[#f6eb6e] hover:bg-[#fbfbf9] transition-colors"
             >
               <FellowshipLogo denomination={d} size="sm" />
               <div className="min-w-0 flex-1">
-                <div className="text-[11px] font-bold text-[#18221D] truncate">{d.shortCode}</div>
-                <div className="text-[10px] text-[#5C6861] tabular-nums">{d.count} students</div>
+                <div className="text-[11px] font-bold text-[#141414] truncate">{d.shortCode}</div>
+                <div className="text-[10px] text-[#61615b] tabular-nums">{d.count} students</div>
               </div>
             </div>
           ))}

@@ -4,13 +4,13 @@ import { AuthRequest, requireAuth } from '../middleware/auth';
 
 const router = Router();
 
-// GET /api/hostels — public
+// GET /api/hostels - public
 router.get('/', async (_req, res: Response) => {
   const result = await db.execute('SELECT * FROM hostels ORDER BY name');
   res.json(result.rows);
 });
 
-// POST /api/hostels — admin only
+// POST /api/hostels - admin only
 router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
   const { name } = req.body;
   if (!name || !name.trim()) return res.status(400).json({ error: 'Name is required' });
@@ -27,7 +27,7 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
   }
 });
 
-// DELETE /api/hostels/:id — admin only
+// DELETE /api/hostels/:id - admin only
 router.delete('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
   const result = await db.execute({ sql: 'DELETE FROM hostels WHERE id = ?', args: [Number(req.params.id)] });
   if (result.rowsAffected === 0) return res.status(404).json({ error: 'Hostel not found' });

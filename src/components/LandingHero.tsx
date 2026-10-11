@@ -67,7 +67,7 @@ const STEPS = [
     num: '02',
     icon: <Building2 className="w-5 h-5" />,
     title: 'Program & residence',
-    body: 'Your level, course of study, and hostel — so we know exactly where to find you.'
+    body: 'Your level, course of study, and hostel - so we know exactly where to find you.'
   },
   {
     num: '03',
@@ -120,7 +120,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
         <FellowshipLogo
           denomination={d}
           size="lg"
-          className="w-10! h-10! md:w-14! md:h-14! transition-transform duration-200 group-hover:scale-110"
+          className="w-full! h-full! md:w-14! md:h-14! transition-transform duration-200 group-hover:scale-110"
         />
       </button>
     </div>
@@ -232,7 +232,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
 
   return (
     <div ref={pageRef} className="bg-black">
-      {/* ── Panel 1 — Hero ──────────────────────────────────────────────── */}
+      {/* ── Panel 1 - Hero ──────────────────────────────────────────────── */}
       <section className="relative z-10 sticky top-0" data-stack-panel>
         <div data-stack-inner className="relative flex flex-col min-h-svh overflow-hidden text-white">
         {/* Background Image in Motion */}
@@ -243,10 +243,10 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
             className="w-full h-full object-cover animate-image-motion"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/95 via-black/78 to-black/45" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/60" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/45 to-black/15" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/65 via-transparent to-black/25" />
           <div className="grain absolute inset-0 opacity-25" />
-          <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-[#C59B4B]/15 blur-3xl pointer-events-none" />
+          <div className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-[#f5e11d]/15 blur-3xl pointer-events-none" />
         </div>
 
         {/* Center Hero Proposition */}
@@ -254,24 +254,27 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
           <div className="mx-auto max-w-[1320px] w-full">
             {/* Standalone SCC Logo Medallion */}
             <div
-              className="w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden border-2 border-[#C59B4B]/70 bg-white/10 backdrop-blur-md shadow-sanctuary-lg p-1"
+              className="flex items-center gap-4 sm:gap-6"
               data-reveal
               style={{ animationDelay: '0.08s' }}
             >
-              <img
-                src={sccLogo}
-                alt="Student Christian Council logo"
-                className="w-full h-full object-cover rounded-full"
-              />
-            </div>
+              <div className="w-24 h-24 sm:w-32 sm:h-32 shrink-0 rounded-full overflow-hidden border-2 border-[#f5e11d]/70 bg-white/10 backdrop-blur-md shadow-sanctuary-lg p-1">
+                <img
+                  src={sccLogo}
+                  alt="Student Christian Council logo"
+                  className="w-full h-full object-cover rounded-full"
+                />
+              </div>
 
-            <div
-              className="mt-6 inline-flex items-center gap-2 border border-white/25 bg-white/10 backdrop-blur-md px-3.5 py-1.5 rounded-full text-xs text-[#EDF7F1]"
-              data-reveal
-              style={{ animationDelay: '0.16s' }}
-            >
-              <span className="w-2 h-2 rounded-full bg-[#2E7D56] animate-pulse" />
-              <span>2026/2027 Campus Orientation & Intake</span>
+              <div className="min-w-0">
+                <span className="font-heading block text-[clamp(1.4rem,3.6vw,2.6rem)] font-semibold leading-[1.05] tracking-[-0.03em] text-white text-balance">
+                  UMaT Student Christian Council
+                </span>
+                <span className="mt-3 flex items-center gap-3">
+                  <span className="h-px w-10 sm:w-20 bg-[#f5e11d]/80" />
+                  <span className="h-1.5 w-1.5 rounded-full bg-[#f5e11d]/80" />
+                </span>
+              </div>
             </div>
 
             <h1
@@ -281,16 +284,16 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
             >
               Unity and Service
               <br />
-              <span className="text-[#E8CD96]">in Christ.</span>
+              <span className="text-[#fff187]">in Christ.</span>
             </h1>
 
             <p
-              className="mt-6 text-base sm:text-lg text-[#EDF7F1]/85 leading-relaxed max-w-2xl"
+              className="mt-6 text-base sm:text-lg text-[#f8f8f2]/85 leading-relaxed max-w-2xl"
               data-reveal
               style={{ animationDelay: '0.32s' }}
             >
               The Student Christian Council brings together all denominational fellowships.
-              Register your campus contact, program, and residence in three quick steps —
+              Register your campus contact, program, and residence in three quick steps -
               your fellowship leadership takes it from there.
             </p>
 
@@ -301,7 +304,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
             >
               <button
                 onClick={onStartRegistration}
-                className="px-7 py-3.5 bg-[#C59B4B] hover:bg-[#E8CD96] text-[#18221D] text-sm font-semibold rounded-xl shadow-lg flex items-center justify-center gap-2.5 transition-colors cursor-pointer group"
+                className="px-7 py-3.5 bg-[#f5e11d] hover:bg-[#fff187] text-[#141414] text-sm font-semibold rounded-xl shadow-lg flex items-center justify-center gap-2.5 transition-colors cursor-pointer group"
               >
                 <UserPlus className="w-4 h-4" />
                 <span>Register as New Student</span>
@@ -312,42 +315,35 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                 onClick={onOpenAdmin}
                 className="border border-white/30 hover:border-white/60 bg-white/5 backdrop-blur-md text-white/90 hover:text-white px-6 py-3.5 rounded-xl text-sm font-semibold flex items-center justify-center gap-2 transition-all cursor-pointer"
               >
-                <ShieldCheck className="w-4 h-4 text-[#C59B4B]" />
+                <ShieldCheck className="w-4 h-4 text-[#f5e11d]" />
                 <span>SCC & Denomination Portals</span>
               </button>
             </div>
 
             <ul
-              className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[#EDF7F1]/65"
+              className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-2 text-xs text-[#f8f8f2]/65"
               data-reveal
               style={{ animationDelay: '0.48s' }}
             >
               <li className="flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5 text-[#C59B4B]" />
+                <Clock className="w-3.5 h-3.5 text-[#f5e11d]" />
                 <span>Takes under 2 minutes</span>
               </li>
               <li className="flex items-center gap-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#C59B4B]" />
+                <CheckCircle2 className="w-3.5 h-3.5 text-[#f5e11d]" />
                 <span>Free &amp; no account needed</span>
               </li>
               <li className="flex items-center gap-1.5">
-                <MessageCircle className="w-3.5 h-3.5 text-[#C59B4B]" />
+                <MessageCircle className="w-3.5 h-3.5 text-[#f5e11d]" />
                 <span>Direct WhatsApp to your campus rep</span>
               </li>
             </ul>
           </div>
         </div>
-
-        {/* Corner Marker */}
-        <div className="absolute bottom-8 right-6 hidden lg:block text-right text-xs text-[#EDF7F1]/60 leading-relaxed">
-          <span className="text-[#C59B4B] font-semibold tracking-[0.16em]">01</span>
-          <br />
-          Ghana campus register
-        </div>
         </div>
       </section>
 
-      {/* ── Panel 2 — Orbiting Fellowship Logos ───────────────────────── */}
+      {/* ── Panel 2 - Orbiting Fellowship Logos ───────────────────────── */}
       <section className="relative z-20 sticky top-0" data-stack-panel>
         <div
           data-stack-inner
@@ -361,13 +357,13 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
             className="w-full h-full object-cover"
             referrerPolicy="no-referrer"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-black/90 via-black/70 to-black/40" />
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-black/50" />
+          <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/50 to-black/20" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30" />
         </div>
 
         <div className="relative z-10 max-w-6xl mx-auto px-5 sm:px-10 lg:px-16 pt-8 sm:pt-16 pb-10 sm:pb-18">
           <div className="text-center space-y-2" data-reveal>
-            <p className="font-heading text-sm font-semibold text-[#E8CD96]">The fellowships</p>
+            <p className="font-heading text-sm font-semibold text-[#fff187]">The fellowships</p>
             <h2 className="font-heading text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-[-0.03em] text-white">
               Every campus tradition, one council
             </h2>
@@ -376,7 +372,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
           <div className="orbit-stage relative mx-auto mt-8 sm:mt-10">
             {/* Solar glow behind the sun */}
             <div
-              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#C59B4B]/25 blur-2xl pointer-events-none"
+              className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-[#f5e11d]/25 blur-2xl pointer-events-none"
               style={{ width: 'calc(var(--center) * 1.8)', height: 'calc(var(--center) * 1.8)' }}
             />
 
@@ -399,7 +395,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
               className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-10 cursor-pointer transition-transform hover:scale-105"
               style={{ width: 'var(--center)', height: 'var(--center)' }}
             >
-              <div className="w-full h-full rounded-full bg-white border-2 border-[#C59B4B] shadow-sanctuary-lg overflow-hidden p-1">
+              <div className="w-full h-full rounded-full bg-white border-2 border-[#f5e11d] shadow-sanctuary-lg overflow-hidden p-1">
                 <img
                   src={sccLogo}
                   alt="Student Christian Council logo"
@@ -408,7 +404,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
               </div>
             </button>
 
-            {/* Inner orbit — counter-clockwise, staggered against the outer ring */}
+            {/* Inner orbit - counter-clockwise, staggered against the outer ring */}
             {innerRing.length > 0 && (
               <div
                 className="orbit-ring-ccw absolute inset-0"
@@ -419,7 +415,7 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
                     `inner-dot-${k}`,
                     (360 / innerRing.length) * k,
                     'var(--r-inner)',
-                    'bg-[#2E7D56]/40',
+                    'bg-[#141414]/40',
                     6
                   )
                 )}
@@ -435,14 +431,14 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
               </div>
             )}
 
-            {/* Outer orbit — clockwise */}
+            {/* Outer orbit - clockwise */}
             <div className="orbit-ring-cw absolute inset-0" style={{ animationDuration: '60s' }}>
               {[0.5, 1.5, 2.5, 3.5].map((k, i) =>
                 renderOrbitDot(
                   `outer-dot-${i}`,
                   (360 / outerRing.length) * k,
                   'var(--r-outer)',
-                  'bg-[#C59B4B]/70',
+                  'bg-[#f5e11d]/70',
                   7
                 )
               )}
@@ -458,50 +454,50 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
             </div>
           </div>
 
-          <p className="text-center text-xs text-[#EDF7F1]/70 mt-8" data-reveal>
-            <span className="font-bold text-[#E8CD96]">{fellowships.length}</span>{' '}
+          <p className="text-center text-xs text-[#f8f8f2]/70 mt-8" data-reveal>
+            <span className="font-bold text-[#fff187]">{fellowships.length}</span>{' '}
             fellowships orbiting one Student Christian Council
           </p>
         </div>
         </div>
       </section>
 
-      {/* ── Panel 3 — How It Works ─────────────────────────────────────── */}
+      {/* ── Panel 3 - How It Works ─────────────────────────────────────── */}
       <section className="relative z-30 sticky top-0" data-stack-panel>
         <div
           data-stack-inner
-          className="min-h-svh flex flex-col justify-center rounded-t-[2rem] md:rounded-t-[3rem] bg-[#F5F1E8] panel-lift"
+          className="min-h-svh flex flex-col justify-center rounded-t-[2rem] md:rounded-t-[3rem] bg-[#fcfbf3] panel-lift"
         >
         <div className="max-w-6xl mx-auto px-5 sm:px-10 lg:px-16 pt-10 sm:pt-20 pb-12 sm:pb-20">
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
             <div>
-              <p className="font-heading text-sm font-semibold text-[#C59B4B]">How it works</p>
-              <h2 className="mt-4 font-heading text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-[-0.04em] leading-[0.96] text-[#18221D] max-w-xl text-balance">
-                Three steps. <span className="text-[#2E7D56]">Two minutes.</span>
+              <p className="font-heading text-sm font-semibold text-[#f5e11d]">How it works</p>
+              <h2 className="mt-4 font-heading text-4xl sm:text-5xl lg:text-6xl font-semibold tracking-[-0.04em] leading-[0.96] text-[#141414] max-w-xl text-balance">
+                Three steps. <span className="text-[#141414]">Two minutes.</span>
               </h2>
             </div>
-            <p className="text-sm text-[#5C6861] max-w-xs leading-6">
-              Your details go directly to the campus fellowship you choose — no forms to
+            <p className="text-sm text-[#61615b] max-w-xs leading-6">
+              Your details go directly to the campus fellowship you choose - no forms to
               re-fill, no waiting in line.
             </p>
           </div>
 
-          <div ref={stepsRef} className="mt-10 sm:mt-14 grid border-t border-[#18221D]/12">
+          <div ref={stepsRef} className="mt-10 sm:mt-14 grid border-t border-[#141414]/12">
             {STEPS.map((step, i) => (
               <div
                 key={step.num}
-                className={`grid grid-cols-[64px_1fr] sm:grid-cols-[96px_1fr_1fr] items-center gap-4 sm:gap-8 border-b border-[#18221D]/12 py-5 sm:py-7 ${
+                className={`grid grid-cols-[64px_1fr] sm:grid-cols-[96px_1fr_1fr] items-center gap-4 sm:gap-8 border-b border-[#141414]/12 py-5 sm:py-7 ${
                   stepsRevealed ? 'reveal-up' : 'opacity-0'
                 }`}
                 style={{ animationDelay: stepsRevealed ? `${i * 0.12}s` : undefined }}
               >
-                <span className="flex h-14 w-14 rounded-full border border-[#18221D]/15 bg-white/60 items-center justify-center text-[#2E7D56]">
+                <span className="flex h-14 w-14 rounded-full border border-[#141414]/15 bg-white/60 items-center justify-center text-[#141414]">
                   {step.icon}
                 </span>
-                <h3 className="font-heading text-2xl sm:text-3xl font-semibold tracking-tight text-[#18221D]">
+                <h3 className="font-heading text-2xl sm:text-3xl font-semibold tracking-tight text-[#141414]">
                   {step.title}
                 </h3>
-                <p className="col-start-2 mt-1 text-sm leading-6 text-[#5C6861] sm:col-start-3 sm:mt-0">
+                <p className="col-start-2 mt-1 text-sm leading-6 text-[#61615b] sm:col-start-3 sm:mt-0">
                   {step.body}
                 </p>
               </div>
@@ -511,31 +507,31 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
         </div>
       </section>
 
-      {/* ── Panel 4 — Closing CTA ─────────────────────────────────────── */}
+      {/* ── Panel 4 - Closing CTA ─────────────────────────────────────── */}
       <section className="relative z-40 md:sticky md:top-0 rounded-t-[2rem] md:rounded-t-[3rem] bg-black text-white panel-lift overflow-hidden">
         <img
           src={chapelImage}
           alt=""
           aria-hidden="true"
-          className="absolute inset-0 w-full h-full object-cover opacity-40"
+          className="absolute inset-0 w-full h-full object-cover opacity-65"
           referrerPolicy="no-referrer"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-black/94 via-black/78 to-black/50" />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/85 via-black/55 to-black/25" />
         <div className="grain absolute inset-0 opacity-25" />
 
         <div className="relative flex min-h-[80vh] items-center">
           <div className="mx-auto max-w-6xl w-full px-5 sm:px-10 lg:px-16 py-16 sm:py-20 grid gap-12 lg:grid-cols-[0.9fr_1.1fr] items-center">
             <div data-reveal>
-              <p className="font-heading text-sm font-semibold text-[#C59B4B]">
+              <p className="font-heading text-sm font-semibold text-[#f5e11d]">
                 Freshers intake 2026/2027
               </p>
               <h2 className="mt-5 font-heading text-5xl sm:text-6xl font-semibold tracking-[-0.05em] leading-[0.92] text-balance">
                 Come as you are.
                 <br />
-                <span className="text-[#E8CD96]">Leave with a family.</span>
+                <span className="text-[#fff187]">Leave with a family.</span>
               </h2>
-              <p className="mt-6 max-w-md text-base text-[#EDF7F1]/75 leading-relaxed">
-                Three short phases, one minute of your time — your campus fellowship leaders
+              <p className="mt-6 max-w-md text-base text-[#f8f8f2]/75 leading-relaxed">
+                Three short phases, one minute of your time - your campus fellowship leaders
                 take it from there.
               </p>
             </div>
@@ -545,32 +541,27 @@ export const LandingHero: React.FC<LandingHeroProps> = ({
               data-reveal
               style={{ animationDelay: '0.15s' }}
             >
-              <p className="text-xs text-[#EDF7F1]/60">Join the register</p>
+              <p className="text-xs text-[#f8f8f2]/60">Join the register</p>
 
-              <div className="mt-4 flex flex-col sm:flex-row gap-3">
+              <div className="mt-5">
                 <button
                   onClick={onStartRegistration}
-                  className="inline-flex items-center justify-center gap-2 bg-[#C59B4B] hover:bg-[#E8CD96] text-[#18221D] px-6 py-3.5 rounded-xl text-sm font-semibold transition-colors cursor-pointer group"
+                  className="w-full inline-flex items-center justify-between gap-3 bg-gradient-to-r from-[#f5e11d] to-[#f5e11d] hover:from-[#fff187] hover:to-[#fff187] text-[#141414] px-6 py-4 rounded-2xl text-sm font-bold shadow-lg shadow-black/30 hover:shadow-xl hover:shadow-black/30 hover:-translate-y-0.5 active:translate-y-0 transition-all cursor-pointer group"
                 >
-                  <UserPlus className="w-4 h-4" />
-                  <span>Register as a new student</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </button>
-                <button
-                  onClick={onOpenAdmin}
-                  className="inline-flex items-center justify-center gap-2 border border-white/25 text-white/90 hover:text-white hover:border-white/50 px-6 py-3.5 rounded-xl text-sm font-semibold transition-colors cursor-pointer"
-                >
-                  <ShieldCheck className="w-4 h-4 text-[#C59B4B]" />
-                  <span>Fellowship portal login</span>
+                  <span className="inline-flex items-center gap-2.5">
+                    <UserPlus className="w-5 h-5" />
+                    Register as a new student
+                  </span>
+                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
 
-              <p className="mt-5 text-xs leading-5 text-[#EDF7F1]/55">
+              <p className="mt-5 text-xs leading-5 text-[#f8f8f2]/55">
                 Free · no account needed · WhatsApp confirmation from your campus rep.
               </p>
 
               <div className="mt-6 pt-5 border-t border-white/15 text-xs">
-                <span className="text-[#EDF7F1]/60">
+                <span className="text-[#f8f8f2]/60">
                   One council · {fellowshipCodes.length} campus fellowships
                 </span>
               </div>

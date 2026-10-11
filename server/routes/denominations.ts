@@ -4,13 +4,13 @@ import { AuthRequest, requireAuth } from '../middleware/auth';
 
 const router = Router();
 
-// GET /api/denominations — public
+// GET /api/denominations - public
 router.get('/', async (_req, res: Response) => {
   const result = await db.execute('SELECT * FROM denominations');
   res.json(result.rows);
 });
 
-// POST /api/denominations — admin only
+// POST /api/denominations - admin only
 router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
   const { id, name, campusFellowship, shortCode, color, accent, logoText, description, logoImage } = req.body;
 
@@ -45,7 +45,7 @@ router.post('/', requireAuth, async (req: AuthRequest, res: Response) => {
   }
 });
 
-// PUT /api/denominations/:id — admin only
+// PUT /api/denominations/:id - admin only
 router.put('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
   const { id } = req.params;
   const { name, campusFellowship, shortCode, color, accent, logoText, description, logoImage } = req.body;
@@ -77,7 +77,7 @@ router.put('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
   res.json(rowResult.rows[0]);
 });
 
-// DELETE /api/denominations/:id — admin only
+// DELETE /api/denominations/:id - admin only
 router.delete('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
   const studentCount = await db.execute({ sql: 'SELECT COUNT(*) as c FROM students WHERE denominationId = ?', args: [req.params.id] });
   const studentC = Number(studentCount.rows[0].c);

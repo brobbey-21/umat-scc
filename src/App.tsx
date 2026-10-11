@@ -4,7 +4,8 @@
  */
 
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
-import { Church, ShieldCheck, UserPlus, Home } from 'lucide-react';
+import { Home } from 'lucide-react';
+import formBg from './assets/images/IMG_1963.jpg';
 import { StudentRegistration, DenominationAdmin, Denomination, OutreachStatus } from './types';
 import {
   fetchStudentCount, fetchStudents, createStudent, updateStudentStatus,
@@ -271,8 +272,8 @@ export default function App() {
     if (isLoading) {
       return (
         <div className="p-12 text-center space-y-3">
-          <div className="w-8 h-8 border-2 border-[#1B3B2B] border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-xs text-[#5C6861]">Loading registry data...</p>
+          <div className="w-8 h-8 border-2 border-[#141414] border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-xs text-[#61615b]">Loading registry data...</p>
         </div>
       );
     }
@@ -339,7 +340,7 @@ export default function App() {
   // ── Layout ────────────────────────────────────────────────────────────────
 
   return (
-    <div className="min-h-screen bg-[#F9F9F6] text-[#18221D] font-sans selection:bg-[#BEE5CE] selection:text-[#1B3B2B]">
+    <div className="min-h-screen bg-[#fbfbf9] text-[#141414] font-sans selection:bg-[#f6eb6e] selection:text-[#141414]">
       
       {/* Admin portal layout: sidebar + content */}
       {currentTab === 'admin' && isAdmin ? (
@@ -355,7 +356,7 @@ export default function App() {
           />
           <div className="flex-1 flex flex-col min-w-0">
             {notification && (
-              <div className="fixed top-4 right-4 z-50 bg-[#1B3B2B] text-white px-4 py-2.5 rounded-xl shadow-sanctuary-md text-xs font-semibold flex items-center gap-2 animate-fade-in border border-[#C59B4B]">
+              <div className="fixed top-4 right-4 z-50 bg-[#141414] text-white px-4 py-2.5 rounded-xl shadow-sanctuary-md text-xs font-semibold flex items-center gap-2 animate-fade-in border border-[#f5e11d]">
                 <span>{notification}</span>
               </div>
             )}
@@ -365,63 +366,37 @@ export default function App() {
           </div>
         </div>
       ) : (
-        /* Public layout: top header + content */
+        /* Public layout: standalone content */
         <div className="flex flex-col min-h-screen">
           {notification && (
-            <div className="fixed top-20 right-4 z-50 bg-[#1B3B2B] text-white px-4 py-2.5 rounded-xl shadow-sanctuary-md text-xs font-semibold flex items-center gap-2 animate-fade-in border border-[#C59B4B]">
+            <div className="fixed top-20 right-4 z-50 bg-[#141414] text-white px-4 py-2.5 rounded-xl shadow-sanctuary-md text-xs font-semibold flex items-center gap-2 animate-fade-in border border-[#f5e11d]">
               <span>{notification}</span>
             </div>
           )}
 
-          {/* Top Header (hidden on landing — hero has its own; hidden on register — standalone form) */}
-          {currentTab !== 'landing' && currentTab !== 'register' && (
-            <header className="sticky top-0 z-30 bg-[#F9F9F6]/95 backdrop-blur-md border-b border-[#E2E5DC]">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-                <button
-                  onClick={() => setCurrentTab('landing')}
-                  className="text-left flex items-center gap-2.5 cursor-pointer group"
-                >
-                  <div className="w-9 h-9 rounded-xl bg-[#1B3B2B] text-white flex items-center justify-center shadow-sanctuary-sm group-hover:bg-[#142C20] transition-colors">
-                    <Church className="w-4.5 h-4.5 text-[#C59B4B]" />
-                  </div>
-                  <div>
-                    <span className="font-heading text-lg font-semibold tracking-tight text-[#18221D] block leading-tight">
-                      Student Christian Council
-                    </span>
-                    <span className="text-[10px] uppercase tracking-[0.08em] text-[#5C6861] font-semibold block">
-                      Campus Fresh Student Registry
-                    </span>
-                  </div>
-                </button>
-
-                <nav className="flex items-center gap-2">
-                  <button
-                    onClick={() => setCurrentTab('landing')}
-                    className="px-3.5 py-2 text-xs font-semibold rounded-xl text-[#5C6861] hover:text-[#18221D] hover:bg-[#F3F4EE] transition-colors flex items-center gap-1.5 cursor-pointer"
-                  >
-                    <Home className="w-4 h-4" />
-                    <span>Home</span>
-                  </button>
-                  <button
-                    onClick={() => setCurrentTab('register')}
-                    className="px-3.5 py-2 text-xs font-semibold rounded-xl transition-colors flex items-center gap-1.5 cursor-pointer text-[#5C6861] hover:text-[#18221D] hover:bg-[#F3F4EE]"
-                  >
-                    <UserPlus className="w-4 h-4" />
-                    <span>Register</span>
-                  </button>
-                  <button
-                    onClick={() => setCurrentTab('admin')}
-                    className="px-3.5 py-2 text-xs font-semibold rounded-xl text-[#5C6861] hover:text-[#18221D] hover:bg-[#F3F4EE] transition-colors flex items-center gap-1.5 cursor-pointer"
-                  >
-                    <ShieldCheck className="w-4 h-4" />
-                    <span>Admin</span>
-                  </button>
-                </nav>
-              </div>
-            </header>
+          {/* Home shortcut - top-left corner of public screens (landing has its own nav) */}
+          {currentTab !== 'landing' && (
+            <button
+              onClick={() => setCurrentTab('landing')}
+              aria-label="Home"
+              className="fixed top-4 left-4 z-40 w-10 h-10 rounded-xl bg-[#FFFFFF] border border-[#e6e6e0] shadow-sanctuary-sm text-[#141414] hover:bg-[#f8f8f2] hover:text-[#050505] transition-colors flex items-center justify-center cursor-pointer"
+            >
+              <Home className="w-5 h-5" />
+            </button>
           )}
 
-          <main className={`flex-1 ${currentTab === 'landing' ? '' : 'max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8'}`}>
+          <main className={`flex-1 ${currentTab === 'landing' || (currentTab === 'admin' && !isAdmin) ? '' : 'max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8'}`}>
+            {currentTab === 'register' && (
+              <div className="fixed inset-0 z-0 pointer-events-none" aria-hidden="true">
+                <img
+                  src={formBg}
+                  alt=""
+                  className="w-full h-full object-cover"
+                  referrerPolicy="no-referrer"
+                />
+                <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/55 to-black/75" />
+              </div>
+            )}
             {currentTab === 'landing' && (
               <LandingHero
                 onStartRegistration={() => setCurrentTab('register')}
@@ -432,35 +407,21 @@ export default function App() {
             )}
 
             {currentTab === 'register' && (
-              <StudentRegistrationForm
-                onSuccess={handleRegisterSuccess}
-                onCancel={() => setCurrentTab('landing')}
-                denominationAdmins={admins}
-                denominations={denominations}
-                initialDenominationId={registrationDenomId ?? undefined}
-              />
+              <div className="relative z-10">
+                <StudentRegistrationForm
+                  onSuccess={handleRegisterSuccess}
+                  onCancel={() => setCurrentTab('landing')}
+                  denominationAdmins={admins}
+                  denominations={denominations}
+                  initialDenominationId={registrationDenomId ?? undefined}
+                />
+              </div>
             )}
 
             {currentTab === 'admin' && !isAdmin && (
-              <AdminLogin
-                onLogin={handleLogin}
-                onCancel={() => setCurrentTab('landing')}
-              />
+              <AdminLogin onLogin={handleLogin} />
             )}
           </main>
-
-          {currentTab !== 'landing' && currentTab !== 'register' && (
-            <footer className="border-t border-[#E2E5DC] bg-[#FFFFFF] py-5 text-xs text-[#5C6861]">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-                <span className="font-heading font-semibold text-[#18221D]">
-                  Student Christian Council (SCC)
-                </span>
-                <span className="text-[#8C9790]">
-                  Campus Fresh Student Registry
-                </span>
-              </div>
-            </footer>
-          )}
         </div>
       )}
     </div>

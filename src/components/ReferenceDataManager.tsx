@@ -55,20 +55,20 @@ export const ReferenceDataManager: React.FC<ReferenceDataManagerProps> = ({
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="font-heading text-3xl font-bold text-[#18221D]">Hostels & Courses</h2>
-        <p className="text-sm text-[#5C6861]">
+        <h2 className="font-heading text-3xl font-bold text-[#141414]">Hostels & Courses</h2>
+        <p className="text-sm text-[#61615b]">
           Manage the reference data used in the student registration form.
         </p>
       </div>
 
       {/* Tab Switcher */}
-      <div className="flex items-center gap-2 border-b border-[#E2E5DC]">
+      <div className="flex items-center gap-2 border-b border-[#e6e6e0]">
         <button
           onClick={() => setActiveTab('hostels')}
           className={`px-4 py-3 text-xs font-semibold border-b-2 transition-colors flex items-center gap-1.5 ${
             activeTab === 'hostels'
-              ? 'border-[#1B3B2B] text-[#1B3B2B]'
-              : 'border-transparent text-[#5C6861] hover:text-[#18221D]'
+              ? 'border-[#141414] text-[#141414]'
+              : 'border-transparent text-[#61615b] hover:text-[#141414]'
           }`}
         >
           <Building2 className="w-4 h-4" />
@@ -78,8 +78,8 @@ export const ReferenceDataManager: React.FC<ReferenceDataManagerProps> = ({
           onClick={() => setActiveTab('courses')}
           className={`px-4 py-3 text-xs font-semibold border-b-2 transition-colors flex items-center gap-1.5 ${
             activeTab === 'courses'
-              ? 'border-[#1B3B2B] text-[#1B3B2B]'
-              : 'border-transparent text-[#5C6861] hover:text-[#18221D]'
+              ? 'border-[#141414] text-[#141414]'
+              : 'border-transparent text-[#61615b] hover:text-[#141414]'
           }`}
         >
           <GraduationCap className="w-4 h-4" />
@@ -97,37 +97,37 @@ export const ReferenceDataManager: React.FC<ReferenceDataManagerProps> = ({
               value={newHostelName}
               onChange={(e) => setNewHostelName(e.target.value)}
               placeholder="e.g. Unity Hall (Continental / Conti)"
-              className="flex-1 h-11 px-4 text-xs bg-white border border-[#D2DDD6] rounded-xl focus:outline-none focus:border-[#2E7D56]"
+              className="flex-1 h-11 px-4 text-xs bg-white border border-[#dbdbd4] rounded-xl focus:outline-none focus:border-[#141414]"
             />
             <button
               type="submit"
               disabled={!newHostelName.trim()}
-              className="px-4 py-2 text-xs font-semibold text-white bg-[#1B3B2B] hover:bg-[#142C20] rounded-xl flex items-center gap-1.5 disabled:opacity-50"
+              className="px-4 py-2 text-xs font-semibold text-white bg-[#141414] hover:bg-[#050505] rounded-xl flex items-center gap-1.5 disabled:opacity-50"
             >
-              <Plus className="w-3.5 h-3.5 text-[#C59B4B]" />
+              <Plus className="w-3.5 h-3.5 text-[#f5e11d]" />
               <span>Add</span>
             </button>
           </form>
 
           {/* Search */}
           <div className="relative max-w-sm">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5C6861]" />
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#61615b]" />
             <input
               type="text"
               value={searchHostels}
               onChange={(e) => setSearchHostels(e.target.value)}
               placeholder="Search hostels..."
-              className="w-full h-10 pl-10 pr-4 text-xs bg-white border border-[#D2DDD6] rounded-xl focus:outline-none focus:border-[#2E7D56]"
+              className="w-full h-10 pl-10 pr-4 text-xs bg-white border border-[#dbdbd4] rounded-xl focus:outline-none focus:border-[#141414]"
             />
           </div>
 
           {/* List */}
-          <div className="bg-white border border-[#E2E5DC] rounded-xl divide-y divide-[#EEF2EF] max-h-[500px] overflow-y-auto">
+          <div className="bg-white border border-[#e6e6e0] rounded-xl divide-y divide-[#f0f0ea] max-h-[500px] overflow-y-auto">
             {filteredHostels.map((hostel) => (
-              <div key={hostel.id} className="flex items-center justify-between px-4 py-3 hover:bg-[#F9F9F6]">
+              <div key={hostel.id} className="flex items-center justify-between px-4 py-3 hover:bg-[#fbfbf9]">
                 <div className="flex items-center gap-3">
-                  <Building2 className="w-4 h-4 text-[#8C9790]" />
-                  <span className="text-xs font-semibold text-[#18221D]">{hostel.name}</span>
+                  <Building2 className="w-4 h-4 text-[#9b9b93]" />
+                  <span className="text-xs font-semibold text-[#141414]">{hostel.name}</span>
                 </div>
                 {deleteHostelConfirm === hostel.id ? (
                   <div className="flex items-center gap-2">
@@ -139,7 +139,7 @@ export const ReferenceDataManager: React.FC<ReferenceDataManagerProps> = ({
                     </button>
                     <button
                       onClick={() => setDeleteHostelConfirm(null)}
-                      className="px-3 py-1 text-[11px] font-semibold text-[#5C6861] bg-[#F3F4EE] rounded-lg"
+                      className="px-3 py-1 text-[11px] font-semibold text-[#61615b] bg-[#f4f4ee] rounded-lg"
                     >
                       Cancel
                     </button>
@@ -147,7 +147,7 @@ export const ReferenceDataManager: React.FC<ReferenceDataManagerProps> = ({
                 ) : (
                   <button
                     onClick={() => setDeleteHostelConfirm(hostel.id)}
-                    className="p-1.5 text-[#8C9790] hover:text-[#BA1A1A] hover:bg-[#FDF3F3] rounded-lg transition-colors"
+                    className="p-1.5 text-[#9b9b93] hover:text-[#BA1A1A] hover:bg-[#FDF3F3] rounded-lg transition-colors"
                     title="Remove"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -156,7 +156,7 @@ export const ReferenceDataManager: React.FC<ReferenceDataManagerProps> = ({
               </div>
             ))}
             {filteredHostels.length === 0 && (
-              <div className="p-8 text-center text-xs text-[#5C6861]">No hostels found.</div>
+              <div className="p-8 text-center text-xs text-[#61615b]">No hostels found.</div>
             )}
           </div>
         </div>
@@ -172,37 +172,37 @@ export const ReferenceDataManager: React.FC<ReferenceDataManagerProps> = ({
               value={newCourseName}
               onChange={(e) => setNewCourseName(e.target.value)}
               placeholder="e.g. BSc Computer Science & Engineering"
-              className="flex-1 h-11 px-4 text-xs bg-white border border-[#D2DDD6] rounded-xl focus:outline-none focus:border-[#2E7D56]"
+              className="flex-1 h-11 px-4 text-xs bg-white border border-[#dbdbd4] rounded-xl focus:outline-none focus:border-[#141414]"
             />
             <button
               type="submit"
               disabled={!newCourseName.trim()}
-              className="px-4 py-2 text-xs font-semibold text-white bg-[#1B3B2B] hover:bg-[#142C20] rounded-xl flex items-center gap-1.5 disabled:opacity-50"
+              className="px-4 py-2 text-xs font-semibold text-white bg-[#141414] hover:bg-[#050505] rounded-xl flex items-center gap-1.5 disabled:opacity-50"
             >
-              <Plus className="w-3.5 h-3.5 text-[#C59B4B]" />
+              <Plus className="w-3.5 h-3.5 text-[#f5e11d]" />
               <span>Add</span>
             </button>
           </form>
 
           {/* Search */}
           <div className="relative max-w-sm">
-            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5C6861]" />
+            <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#61615b]" />
             <input
               type="text"
               value={searchCourses}
               onChange={(e) => setSearchCourses(e.target.value)}
               placeholder="Search courses..."
-              className="w-full h-10 pl-10 pr-4 text-xs bg-white border border-[#D2DDD6] rounded-xl focus:outline-none focus:border-[#2E7D56]"
+              className="w-full h-10 pl-10 pr-4 text-xs bg-white border border-[#dbdbd4] rounded-xl focus:outline-none focus:border-[#141414]"
             />
           </div>
 
           {/* List */}
-          <div className="bg-white border border-[#E2E5DC] rounded-xl divide-y divide-[#EEF2EF] max-h-[500px] overflow-y-auto">
+          <div className="bg-white border border-[#e6e6e0] rounded-xl divide-y divide-[#f0f0ea] max-h-[500px] overflow-y-auto">
             {filteredCourses.map((course) => (
-              <div key={course.id} className="flex items-center justify-between px-4 py-3 hover:bg-[#F9F9F6]">
+              <div key={course.id} className="flex items-center justify-between px-4 py-3 hover:bg-[#fbfbf9]">
                 <div className="flex items-center gap-3">
-                  <GraduationCap className="w-4 h-4 text-[#8C9790]" />
-                  <span className="text-xs font-semibold text-[#18221D]">{course.name}</span>
+                  <GraduationCap className="w-4 h-4 text-[#9b9b93]" />
+                  <span className="text-xs font-semibold text-[#141414]">{course.name}</span>
                 </div>
                 {deleteCourseConfirm === course.id ? (
                   <div className="flex items-center gap-2">
@@ -214,7 +214,7 @@ export const ReferenceDataManager: React.FC<ReferenceDataManagerProps> = ({
                     </button>
                     <button
                       onClick={() => setDeleteCourseConfirm(null)}
-                      className="px-3 py-1 text-[11px] font-semibold text-[#5C6861] bg-[#F3F4EE] rounded-lg"
+                      className="px-3 py-1 text-[11px] font-semibold text-[#61615b] bg-[#f4f4ee] rounded-lg"
                     >
                       Cancel
                     </button>
@@ -222,7 +222,7 @@ export const ReferenceDataManager: React.FC<ReferenceDataManagerProps> = ({
                 ) : (
                   <button
                     onClick={() => setDeleteCourseConfirm(course.id)}
-                    className="p-1.5 text-[#8C9790] hover:text-[#BA1A1A] hover:bg-[#FDF3F3] rounded-lg transition-colors"
+                    className="p-1.5 text-[#9b9b93] hover:text-[#BA1A1A] hover:bg-[#FDF3F3] rounded-lg transition-colors"
                     title="Remove"
                   >
                     <Trash2 className="w-3.5 h-3.5" />
@@ -231,7 +231,7 @@ export const ReferenceDataManager: React.FC<ReferenceDataManagerProps> = ({
               </div>
             ))}
             {filteredCourses.length === 0 && (
-              <div className="p-8 text-center text-xs text-[#5C6861]">No courses found.</div>
+              <div className="p-8 text-center text-xs text-[#61615b]">No courses found.</div>
             )}
           </div>
         </div>

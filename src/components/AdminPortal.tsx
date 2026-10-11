@@ -7,6 +7,7 @@ import {
 } from '../types';
 import { COMMON_HALLS_AND_HOSTELS } from '../data/mockData';
 import { FellowshipLogo } from './FellowshipLogo';
+import { CountryFlag } from './CountryFlag';
 import { COUNTRY_CODES } from '../constants/countries';
 import {
   Shield,
@@ -142,15 +143,15 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
     const rows = visibleStudents.map((s) => [
       `"${s.fullName}"`,
-      s.gender || '—',
+      s.gender || '-',
       `"${s.phone}"`,
       `"${s.programOfStudy}"`,
       s.academicLevel,
       `"${s.hallOrHostel}"`,
-      `"${s.roomOrBlock || '—'}"`,
+      `"${s.roomOrBlock || '-'}"`,
       `"${s.denominationName}"`,
       s.fellowshipCode,
-      `"${s.homeParishOrCity || '—'}"`,
+      `"${s.homeParishOrCity || '-'}"`,
       s.outreachStatus,
       new Date(s.registeredAt).toLocaleDateString()
     ]);
@@ -231,29 +232,29 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
     <div className="space-y-6">
       
       {/* Main Content Area */}
-      <div className="bg-[#FFFFFF] border border-[#E2E5DC] rounded-2xl shadow-sanctuary-sm overflow-hidden">
+      <div className="bg-[#FFFFFF] border border-[#e6e6e0] rounded-2xl shadow-sanctuary-sm overflow-hidden">
         
         {/* SUB-VIEW: STUDENTS LEDGER */}
         {(activeTab === 'students' || !isCentralView) && (
           <div>
             {/* Filter Bar */}
-            <div className="p-4 sm:p-5 border-b border-[#E2E5DC] space-y-3">
+            <div className="p-4 sm:p-5 border-b border-[#e6e6e0] space-y-3">
               
               {/* Search + Export Row */}
               <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
                 <div className="relative flex-1 min-w-[240px]">
-                  <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5C6861]" />
+                  <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#61615b]" />
                   <input
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     placeholder="Search student by name, phone, program, hall..."
-                    className="w-full h-11 pl-10 pr-4 text-xs sm:text-sm bg-[#FFFFFF] border border-[#D2DDD6] rounded-xl text-[#18221D] placeholder-[#8C9790] focus:outline-none focus:border-[#2E7D56]"
+                    className="w-full h-11 pl-10 pr-4 text-xs sm:text-sm bg-[#FFFFFF] border border-[#dbdbd4] rounded-xl text-[#141414] placeholder-[#9b9b93] focus:outline-none focus:border-[#141414]"
                   />
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#5C6861]"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[#61615b]"
                     >
                       <X className="w-4 h-4" />
                     </button>
@@ -262,7 +263,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
                 <button
                   onClick={handleExportCSV}
-                  className="h-11 px-3.5 text-xs font-semibold text-[#1B3B2B] bg-[#F3F4EE] hover:bg-[#E2E5DC] border border-[#D2DDD6] rounded-xl transition-colors flex items-center justify-center gap-1.5"
+                  className="h-11 px-3.5 text-xs font-semibold text-[#141414] bg-[#f4f4ee] hover:bg-[#e6e6e0] border border-[#dbdbd4] rounded-xl transition-colors flex items-center justify-center gap-1.5"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>Export CSV</span>
@@ -272,27 +273,27 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               {/* Filter Selectors Row */}
               <div className="flex flex-wrap items-center gap-2">
                 <div className="flex items-center gap-1.5">
-                  <Building className="w-3.5 h-3.5 text-[#5C6861]" />
+                  <Building className="w-3.5 h-3.5 text-[#61615b]" />
                   <select
                     value={selectedScope}
                     onChange={(e) => setSelectedScope(e.target.value)}
-                    className="h-9 pl-2 pr-3 bg-[#FFFFFF] border border-[#D2DDD6] rounded-lg text-xs font-semibold text-[#18221D] focus:outline-none focus:border-[#2E7D56]"
+                    className="h-9 pl-2 pr-3 bg-[#FFFFFF] border border-[#dbdbd4] rounded-lg text-xs font-semibold text-[#141414] focus:outline-none focus:border-[#141414]"
                   >
                     <option value="central">All Fellowships ({students.length})</option>
                     {denominationStats.map((d) => (
                       <option key={d.id} value={d.id}>
-                        {d.shortCode} — {d.name} ({d.studentCount})
+                        {d.shortCode} - {d.name} ({d.studentCount})
                       </option>
                     ))}
                   </select>
                 </div>
 
                 <div className="flex items-center gap-1.5">
-                  <Home className="w-3.5 h-3.5 text-[#5C6861]" />
+                  <Home className="w-3.5 h-3.5 text-[#61615b]" />
                   <select
                     value={filterHall}
                     onChange={(e) => setFilterHall(e.target.value)}
-                    className="h-9 pl-2 pr-3 bg-[#FFFFFF] border border-[#D2DDD6] rounded-lg text-xs font-semibold text-[#18221D] focus:outline-none focus:border-[#2E7D56]"
+                    className="h-9 pl-2 pr-3 bg-[#FFFFFF] border border-[#dbdbd4] rounded-lg text-xs font-semibold text-[#141414] focus:outline-none focus:border-[#141414]"
                   >
                     <option value="ALL">All Halls & Hostels</option>
                     {activeHalls.map((h) => (
@@ -304,11 +305,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </div>
 
                 <div className="flex items-center gap-1.5">
-                  <MessageCircle className="w-3.5 h-3.5 text-[#5C6861]" />
+                  <MessageCircle className="w-3.5 h-3.5 text-[#61615b]" />
                   <select
                     value={filterStatus}
                     onChange={(e) => setFilterStatus(e.target.value)}
-                    className="h-9 pl-2 pr-3 bg-[#FFFFFF] border border-[#D2DDD6] rounded-lg text-xs font-semibold text-[#18221D] focus:outline-none focus:border-[#2E7D56]"
+                    className="h-9 pl-2 pr-3 bg-[#FFFFFF] border border-[#dbdbd4] rounded-lg text-xs font-semibold text-[#141414] focus:outline-none focus:border-[#141414]"
                   >
                     <option value="ALL">All Outreach Statuses</option>
                     <option value="New / Pending">New / Pending</option>
@@ -323,9 +324,9 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             {/* Students Table */}
             {visibleStudents.length === 0 ? (
               <div className="p-12 text-center space-y-2">
-                <Users className="w-8 h-8 text-[#8C9790] mx-auto" />
-                <h3 className="font-heading text-lg text-[#18221D]">No student records found</h3>
-                <p className="text-xs text-[#5C6861] max-w-sm mx-auto">
+                <Users className="w-8 h-8 text-[#9b9b93] mx-auto" />
+                <h3 className="font-heading text-lg text-[#141414]">No student records found</h3>
+                <p className="text-xs text-[#61615b] max-w-sm mx-auto">
                   No registered students match your current search criteria or filter scope.
                 </p>
               </div>
@@ -333,7 +334,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               <div className="overflow-x-auto">
                 <table className="w-full text-left border-collapse">
                   <thead>
-                    <tr className="bg-[#F9F9F6] border-b border-[#E2E5DC] text-[11px] uppercase tracking-wider text-[#5C6861] font-semibold">
+                    <tr className="bg-[#fbfbf9] border-b border-[#e6e6e0] text-[11px] uppercase tracking-wider text-[#61615b] font-semibold">
                       <th className="py-3 px-4">Student & Contact</th>
                       <th className="py-3 px-4">Program & Level</th>
                       <th className="py-3 px-4">Hall / Hostel</th>
@@ -342,22 +343,22 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                       <th className="py-3 pr-4 pl-3 text-right">Quick Actions</th>
                     </tr>
                   </thead>
-                  <tbody className="divide-y divide-[#EEF2EF] text-xs">
+                  <tbody className="divide-y divide-[#f0f0ea] text-xs">
                     {visibleStudents.map((student) => {
                       const cleanPhone = student.phone.replace(/[^0-9]/g, '');
 
                       return (
-                        <tr key={student.id} className="hover:bg-[#F9F9F6] transition-colors">
+                        <tr key={student.id} className="hover:bg-[#fbfbf9] transition-colors">
                           {/* Student & Contact */}
                           <td className="py-3.5 px-4">
-                            <div className="font-heading font-semibold text-sm text-[#18221D]">
+                            <div className="font-heading font-semibold text-sm text-[#141414]">
                               {student.fullName}
                             </div>
-                            <div className="font-mono text-[11px] text-[#1B3B2B] mt-0.5 font-semibold">
+                            <div className="font-mono text-[11px] text-[#141414] mt-0.5 font-semibold">
                               {student.phone}
                             </div>
                             {student.homeParishOrCity && (
-                              <div className="text-[10px] text-[#8C9790] truncate max-w-[180px]">
+                              <div className="text-[10px] text-[#9b9b93] truncate max-w-[180px]">
                                 From: {student.homeParishOrCity}
                               </div>
                             )}
@@ -365,14 +366,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
                           {/* Program & Level */}
                           <td className="py-3.5 px-4">
-                            <div className="font-semibold text-[#18221D]">{student.programOfStudy}</div>
-                            <div className="text-[11px] text-[#5C6861]">{student.academicLevel}</div>
+                            <div className="font-semibold text-[#141414]">{student.programOfStudy}</div>
+                            <div className="text-[11px] text-[#61615b]">{student.academicLevel}</div>
                           </td>
 
                           {/* Hall / Hostel */}
                           <td className="py-3.5 px-4">
-                            <div className="font-semibold text-[#18221D]">{student.hallOrHostel}</div>
-                            <div className="text-[11px] text-[#8C9790]">
+                            <div className="font-semibold text-[#141414]">{student.hallOrHostel}</div>
+                            <div className="text-[11px] text-[#9b9b93]">
                               {student.roomOrBlock ? `Room: ${student.roomOrBlock}` : 'No room specified'}
                             </div>
                           </td>
@@ -386,10 +387,10 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                   return sDenom ? <FellowshipLogo denomination={sDenom} size="sm" /> : null;
                                 })()}
                                 <div>
-                                  <span className="font-bold text-[11px] text-[#1B3B2B]">
+                                  <span className="font-bold text-[11px] text-[#141414]">
                                     {student.fellowshipCode}
                                   </span>
-                                  <div className="text-[10px] text-[#5C6861] truncate max-w-[130px]">
+                                  <div className="text-[10px] text-[#61615b] truncate max-w-[130px]">
                                     {student.denominationName}
                                   </div>
                                 </div>
@@ -402,18 +403,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                             <span
                               className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider border ${
                                 student.outreachStatus === 'Added to Fellowship Group'
-                                  ? 'bg-[#EDF7F1] text-[#1D5C3E] border-[#BEE5CE]'
+                                  ? 'bg-[#f8f8f2] text-[#141414] border-[#f6eb6e]'
                                   : student.outreachStatus === 'Hostel Visited'
-                                  ? 'bg-[#FCF6E9] text-[#8A6218] border-[#EEDBB2]'
+                                  ? 'bg-[#fffbe0] text-[#7e6f00] border-[#f0e35e]'
                                   : student.outreachStatus === 'Contacted & Welcomed'
-                                  ? 'bg-[#EEF2EF] text-[#1B3B2B] border-[#D2DDD6]'
-                                  : 'bg-[#F9F9F6] text-[#5C6861] border-[#E2E5DC]'
+                                  ? 'bg-[#f0f0ea] text-[#141414] border-[#dbdbd4]'
+                                  : 'bg-[#fbfbf9] text-[#61615b] border-[#e6e6e0]'
                               }`}
                             >
                               {student.outreachStatus}
                             </span>
                             {student.outreachNotes && student.outreachNotes.length > 0 && (
-                              <div className="text-[10px] text-[#5C6861] mt-1 italic truncate max-w-[160px]" title={student.outreachNotes[0]}>
+                              <div className="text-[10px] text-[#61615b] mt-1 italic truncate max-w-[160px]" title={student.outreachNotes[0]}>
                                 "{student.outreachNotes[0]}"
                               </div>
                             )}
@@ -437,7 +438,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                               <a
                                 href={`tel:${student.phone}`}
                                 title="Call Student"
-                                className="p-2 text-[#1B3B2B] hover:bg-[#F3F4EE] rounded-lg transition-colors"
+                                className="p-2 text-[#141414] hover:bg-[#f4f4ee] rounded-lg transition-colors"
                               >
                                 <Phone className="w-4 h-4" />
                               </a>
@@ -448,7 +449,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                                   setSelectedStudentForNote(student);
                                   setNewOutreachStatus(student.outreachStatus);
                                 }}
-                                className="px-2.5 py-1 text-[11px] font-semibold text-[#1B3B2B] bg-[#EDF7F1] hover:bg-[#BEE5CE]/60 rounded-lg border border-[#BEE5CE] transition-colors"
+                                className="px-2.5 py-1 text-[11px] font-semibold text-[#141414] bg-[#f8f8f2] hover:bg-[#f6eb6e]/60 rounded-lg border border-[#f6eb6e] transition-colors"
                               >
                                 Update Status
                               </button>
@@ -469,19 +470,19 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           <div className="p-6 space-y-6">
             <div className="flex items-center justify-between">
               <div>
-                <h3 className="font-heading text-lg font-semibold text-[#18221D]">
+                <h3 className="font-heading text-lg font-semibold text-[#141414]">
                   Denominational Representatives & Fellowship Admins
                 </h3>
-                <p className="text-xs text-[#5C6861]">
+                <p className="text-xs text-[#61615b]">
                   Each denomination rep has designated access to view and minister to their students.
                 </p>
               </div>
 
               <button
                 onClick={() => setIsAddAdminOpen(true)}
-                className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[#1B3B2B] hover:bg-[#142C20] rounded-xl shadow-sanctuary-sm transition-all"
+                className="flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-[#141414] hover:bg-[#050505] rounded-xl shadow-sanctuary-sm transition-all"
               >
-                <Plus className="w-3.5 h-3.5 text-[#C59B4B]" />
+                <Plus className="w-3.5 h-3.5 text-[#f5e11d]" />
                 <span>Add Denomination Admin</span>
               </button>
             </div>
@@ -492,58 +493,58 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 return (
                 <div
                   key={admin.id}
-                  className="bg-[#FFFFFF] border border-[#E2E5DC] rounded-xl p-5 shadow-sanctuary-sm space-y-3 flex flex-col justify-between"
+                  className="bg-[#FFFFFF] border border-[#e6e6e0] rounded-xl p-5 shadow-sanctuary-sm space-y-3 flex flex-col justify-between"
                 >
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
                       {adminDenom ? (
                         <FellowshipLogo denomination={adminDenom} size="sm" />
                       ) : (
-                        <span className="font-bold text-xs bg-[#1B3B2B] text-white px-2 py-0.5 rounded">
+                        <span className="font-bold text-xs bg-[#141414] text-white px-2 py-0.5 rounded">
                           {admin.fellowshipCode}
                         </span>
                       )}
                       <button
                         onClick={() => onDeleteAdmin(admin.id)}
                         title="Remove Admin"
-                        className="text-[#8C9790] hover:text-[#BA1A1A] p-1 rounded"
+                        className="text-[#9b9b93] hover:text-[#BA1A1A] p-1 rounded"
                       >
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
 
                     <div>
-                      <h4 className="font-heading font-semibold text-base text-[#18221D]">
+                      <h4 className="font-heading font-semibold text-base text-[#141414]">
                         {admin.adminName}
                       </h4>
-                      <div className="text-xs text-[#2E7D56] font-semibold">
+                      <div className="text-xs text-[#141414] font-semibold">
                         {admin.roleTitle}
                       </div>
-                      <div className="text-[11px] text-[#5C6861]">
-                        {admin.fellowshipCode} — {admin.denominationName}
+                      <div className="text-[11px] text-[#61615b]">
+                        {admin.fellowshipCode} - {admin.denominationName}
                       </div>
                     </div>
 
-                    <div className="pt-2 border-t border-[#EEF2EF] text-xs text-[#5C6861] space-y-1">
+                    <div className="pt-2 border-t border-[#f0f0ea] text-xs text-[#61615b] space-y-1">
                       <div className="flex items-center gap-1.5">
-                        <Phone className="w-3.5 h-3.5 text-[#8C9790]" />
-                        <span className="font-mono text-[#18221D]">{admin.phone}</span>
+                        <Phone className="w-3.5 h-3.5 text-[#9b9b93]" />
+                        <span className="font-mono text-[#141414]">{admin.phone}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <Mail className="w-3.5 h-3.5 text-[#8C9790]" />
+                        <Mail className="w-3.5 h-3.5 text-[#9b9b93]" />
                         <span className="truncate">{admin.email}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <Home className="w-3.5 h-3.5 text-[#8C9790]" />
+                        <Home className="w-3.5 h-3.5 text-[#9b9b93]" />
                         <span className="truncate">{admin.assignedHalls}</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="pt-2 border-t border-[#EEF2EF]">
+                  <div className="pt-2 border-t border-[#f0f0ea]">
                     <button
                       onClick={() => setSelectedScope(admin.denominationId)}
-                      className="w-full py-1.5 text-xs font-semibold text-[#1B3B2B] bg-[#EDF7F1] hover:bg-[#BEE5CE]/60 rounded-lg border border-[#BEE5CE] transition-colors"
+                      className="w-full py-1.5 text-xs font-semibold text-[#141414] bg-[#f8f8f2] hover:bg-[#f6eb6e]/60 rounded-lg border border-[#f6eb6e] transition-colors"
                     >
                       Open {admin.fellowshipCode} Portal View
                     </button>
@@ -558,15 +559,15 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
       {/* MODAL 1: ADD DENOMINATION ADMIN */}
       {isAddAdminOpen && (
-        <div className="fixed inset-0 z-50 bg-[#18221D]/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-[#FFFFFF] border border-[#E2E5DC] rounded-2xl max-w-md w-full p-6 shadow-sanctuary-lg space-y-4 animate-fade-in">
-            <div className="flex items-center justify-between border-b border-[#EEF2EF] pb-3">
-              <h3 className="font-heading text-xl font-semibold text-[#18221D]">
+        <div className="fixed inset-0 z-50 bg-[#141414]/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-[#FFFFFF] border border-[#e6e6e0] rounded-2xl max-w-md w-full p-6 shadow-sanctuary-lg space-y-4 animate-fade-in">
+            <div className="flex items-center justify-between border-b border-[#f0f0ea] pb-3">
+              <h3 className="font-heading text-xl font-semibold text-[#141414]">
                 Add Denomination Admin
               </h3>
               <button
                 onClick={() => setIsAddAdminOpen(false)}
-                className="text-[#5C6861] hover:text-[#18221D]"
+                className="text-[#61615b] hover:text-[#141414]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -575,17 +576,17 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
             <form onSubmit={handleCreateAdmin} className="space-y-3.5 text-xs">
               {/* Select Denomination */}
               <div className="space-y-1">
-                <label className="text-sm font-medium text-[#18221D]">
+                <label className="text-sm font-medium text-[#141414]">
                   Denomination / Fellowship <span className="text-[#BA1A1A]">*</span>
                 </label>
                 <select
                   value={newAdminDenominationId}
                   onChange={(e) => setNewAdminDenominationId(e.target.value)}
-                  className="w-full h-11 px-3 bg-white border border-[#D2DDD6] rounded-xl text-xs"
+                  className="w-full h-11 px-3 bg-white border border-[#dbdbd4] rounded-xl text-xs"
                 >
                   {denominations.map((d) => (
                     <option key={d.id} value={d.id}>
-                      {d.shortCode} — {d.name}
+                      {d.shortCode} - {d.name}
                     </option>
                   ))}
                 </select>
@@ -593,7 +594,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
               {/* Admin Name */}
               <div className="space-y-1">
-                <label className="text-sm font-medium text-[#18221D]">
+                <label className="text-sm font-medium text-[#141414]">
                   Admin Full Name <span className="text-[#BA1A1A]">*</span>
                 </label>
                 <input
@@ -601,14 +602,14 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   value={newAdminName}
                   onChange={(e) => setNewAdminName(e.target.value)}
                   placeholder="e.g. Elder Kwabena Osei-Mensah"
-                  className="w-full h-11 px-3 bg-white border border-[#D2DDD6] rounded-xl text-xs"
+                  className="w-full h-11 px-3 bg-white border border-[#dbdbd4] rounded-xl text-xs"
                   required
                 />
               </div>
 
               {/* Role Title */}
               <div className="space-y-1">
-                <label className="text-sm font-medium text-[#18221D]">
+                <label className="text-sm font-medium text-[#141414]">
                   Role / Title <span className="text-[#BA1A1A]">*</span>
                 </label>
                 <input
@@ -616,35 +617,44 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   value={newAdminRole}
                   onChange={(e) => setNewAdminRole(e.target.value)}
                   placeholder="e.g. Campus President, Freshers Coordinator"
-                  className="w-full h-11 px-3 bg-white border border-[#D2DDD6] rounded-xl text-xs"
+                  className="w-full h-11 px-3 bg-white border border-[#dbdbd4] rounded-xl text-xs"
                   required
                 />
               </div>
 
               {/* Phone */}
               <div className="space-y-1">
-                <label className="text-sm font-medium text-[#18221D]">
+                <label className="text-sm font-medium text-[#141414]">
                   Phone (WhatsApp) <span className="text-[#BA1A1A]">*</span>
                 </label>
                 <div className="flex gap-2">
+                  <div className="relative w-[112px] shrink-0">
+                    <CountryFlag
+                      iso={
+                        COUNTRY_CODES.find((c) => c.code === newAdminPhoneCountry)
+                          ?.iso ?? 'GH'
+                      }
+                      className="absolute left-2.5 top-1/2 -translate-y-1/2 w-5 h-3.5 rounded-[2px] ring-1 ring-black/10 pointer-events-none z-10"
+                    />
                   <select
                     value={newAdminPhoneCountry}
                     onChange={(e) => setNewAdminPhoneCountry(e.target.value)}
                     aria-label="Country code"
-                    className="w-[104px] shrink-0 h-11 px-2 bg-white border border-[#D2DDD6] rounded-xl text-xs font-mono"
+                    className="w-[124px] shrink-0 h-11 px-2.5 pr-7 bg-white border border-[#dbdbd4] rounded-xl text-xs font-semibold text-[#141414]"
                   >
                     {COUNTRY_CODES.map((c) => (
                       <option key={c.code} value={c.code}>
-                        {c.iso} {c.code}
+                        {c.flag} {c.code}
                       </option>
                     ))}
-                  </select>
+                    </select>
+                  </div>
                   <input
                     type="tel"
                     value={newAdminPhone}
                     onChange={(e) => setNewAdminPhone(e.target.value)}
                     placeholder="24 000 0000"
-                    className="flex-1 h-11 px-3 bg-white border border-[#D2DDD6] rounded-xl text-xs font-mono"
+                    className="flex-1 h-11 px-3 bg-white border border-[#dbdbd4] rounded-xl text-xs font-mono"
                     required
                   />
                 </div>
@@ -652,25 +662,25 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
               {/* Email */}
               <div className="space-y-1">
-                <label className="text-sm font-medium text-[#18221D]">Email Address</label>
+                <label className="text-sm font-medium text-[#141414]">Email Address</label>
                 <input
                   type="email"
                   value={newAdminEmail}
                   onChange={(e) => setNewAdminEmail(e.target.value)}
                   placeholder="admin@campus-fellowship.org"
-                  className="w-full h-11 px-3 bg-white border border-[#D2DDD6] rounded-xl text-xs"
+                  className="w-full h-11 px-3 bg-white border border-[#dbdbd4] rounded-xl text-xs"
                 />
               </div>
 
               {/* Assigned Halls */}
               <div className="space-y-1">
-                <label className="text-sm font-medium text-[#18221D]">Assigned Halls / Quads</label>
+                <label className="text-sm font-medium text-[#141414]">Assigned Halls / Quads</label>
                 <input
                   type="text"
                   value={newAdminHalls}
                   onChange={(e) => setNewAdminHalls(e.target.value)}
                   placeholder="e.g. Katanga, Conti, All Hostels"
-                  className="w-full h-11 px-3 bg-white border border-[#D2DDD6] rounded-xl text-xs"
+                  className="w-full h-11 px-3 bg-white border border-[#dbdbd4] rounded-xl text-xs"
                 />
               </div>
 
@@ -678,13 +688,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 <button
                   type="button"
                   onClick={() => setIsAddAdminOpen(false)}
-                  className="px-4 py-2 font-semibold text-[#5C6861]"
+                  className="px-4 py-2 font-semibold text-[#61615b]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 font-semibold text-white bg-[#1B3B2B] hover:bg-[#142C20] rounded-xl"
+                  className="px-5 py-2 font-semibold text-white bg-[#141414] hover:bg-[#050505] rounded-xl"
                 >
                   Save Admin
                 </button>
@@ -696,18 +706,18 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
       {/* MODAL 2: UPDATE OUTREACH STATUS & NOTE */}
       {selectedStudentForNote && (
-        <div className="fixed inset-0 z-50 bg-[#18221D]/50 backdrop-blur-xs flex items-center justify-center p-4">
-          <div className="bg-[#FFFFFF] border border-[#E2E5DC] rounded-2xl max-w-md w-full p-6 shadow-sanctuary-lg space-y-4 animate-fade-in">
-            <div className="flex items-center justify-between border-b border-[#EEF2EF] pb-3">
+        <div className="fixed inset-0 z-50 bg-[#141414]/50 backdrop-blur-xs flex items-center justify-center p-4">
+          <div className="bg-[#FFFFFF] border border-[#e6e6e0] rounded-2xl max-w-md w-full p-6 shadow-sanctuary-lg space-y-4 animate-fade-in">
+            <div className="flex items-center justify-between border-b border-[#f0f0ea] pb-3">
               <div>
-                <h3 className="font-heading text-lg font-semibold text-[#18221D]">
+                <h3 className="font-heading text-lg font-semibold text-[#141414]">
                   Update Student Outreach
                 </h3>
-                <p className="text-xs text-[#5C6861]">{selectedStudentForNote.fullName}</p>
+                <p className="text-xs text-[#61615b]">{selectedStudentForNote.fullName}</p>
               </div>
               <button
                 onClick={() => setSelectedStudentForNote(null)}
-                className="text-[#5C6861] hover:text-[#18221D]"
+                className="text-[#61615b] hover:text-[#141414]"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -715,11 +725,11 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
             <form onSubmit={handleSaveOutreach} className="space-y-4 text-xs">
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-[#18221D]">Outreach Status</label>
+                <label className="text-sm font-medium text-[#141414]">Outreach Status</label>
                 <select
                   value={newOutreachStatus}
                   onChange={(e) => setNewOutreachStatus(e.target.value as OutreachStatus)}
-                  className="w-full h-11 px-3 bg-white border border-[#D2DDD6] rounded-xl text-xs"
+                  className="w-full h-11 px-3 bg-white border border-[#dbdbd4] rounded-xl text-xs"
                 >
                   <option value="New / Pending">New / Pending Contact</option>
                   <option value="Contacted & Welcomed">Contacted & Welcomed via Call/WhatsApp</option>
@@ -729,13 +739,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
               </div>
 
               <div className="space-y-1.5">
-                <label className="text-sm font-medium text-[#18221D]">Add Fellowship Care Note</label>
+                <label className="text-sm font-medium text-[#141414]">Add Fellowship Care Note</label>
                 <textarea
                   rows={3}
                   value={newOutreachNote}
                   onChange={(e) => setNewOutreachNote(e.target.value)}
                   placeholder="e.g. Visited Room 24 at Katanga, invited to Friday welcome service..."
-                  className="w-full p-3 bg-white border border-[#D2DDD6] rounded-xl text-xs"
+                  className="w-full p-3 bg-white border border-[#dbdbd4] rounded-xl text-xs"
                 />
               </div>
 
@@ -743,13 +753,13 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 <button
                   type="button"
                   onClick={() => setSelectedStudentForNote(null)}
-                  className="px-4 py-2 font-semibold text-[#5C6861]"
+                  className="px-4 py-2 font-semibold text-[#61615b]"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-5 py-2 font-semibold text-white bg-[#1B3B2B] hover:bg-[#142C20] rounded-xl"
+                  className="px-5 py-2 font-semibold text-white bg-[#141414] hover:bg-[#050505] rounded-xl"
                 >
                   Save Status
                 </button>

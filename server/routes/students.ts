@@ -5,19 +5,19 @@ import { AuthRequest, requireAuth } from '../middleware/auth';
 
 const router = Router();
 
-// GET /api/students/count — public, for landing page
+// GET /api/students/count - public, for landing page
 router.get('/count', async (_req, res: Response) => {
   const result = await db.execute('SELECT COUNT(*) as count FROM students');
   res.json({ count: Number(result.rows[0].count) });
 });
 
-// GET /api/students — admin only
+// GET /api/students - admin only
 router.get('/', requireAuth, async (_req: AuthRequest, res: Response) => {
   const result = await db.execute('SELECT * FROM students ORDER BY registeredAt DESC');
   res.json(result.rows.map(parseStudentRow));
 });
 
-// GET /api/students/:id — admin only
+// GET /api/students/:id - admin only
 router.get('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
   const result = await db.execute({ sql: 'SELECT * FROM students WHERE id = ?', args: [req.params.id] });
   const row = result.rows[0];
@@ -25,7 +25,7 @@ router.get('/:id', requireAuth, async (req: AuthRequest, res: Response) => {
   res.json(parseStudentRow(row));
 });
 
-// POST /api/students — public registration
+// POST /api/students - public registration
 router.post('/', async (req, res: Response) => {
   const {
     fullName, gender, phone, whatsappSameAsPhone,
@@ -61,7 +61,7 @@ router.post('/', async (req, res: Response) => {
   res.status(201).json(parseStudentRow(rowResult.rows[0]));
 });
 
-// PATCH /api/students/:id/status — admin only
+// PATCH /api/students/:id/status - admin only
 router.patch('/:id/status', requireAuth, async (req: AuthRequest, res: Response) => {
   const { status, note } = req.body;
   const validStatuses = ['New / Pending', 'Contacted & Welcomed', 'Hostel Visited', 'Added to Fellowship Group'];

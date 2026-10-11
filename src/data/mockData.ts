@@ -164,23 +164,14 @@ export const COMMON_PROGRAMS = [
   'Transport Planning and Management',
   'Mathematics with Finance',
   'Engineering Mathematics',
-  'Mechanical Engineering — Top-up',
-  'Electrical and Electronic Engineering — Top-up'
+  'Mechanical Engineering - Top-up',
+  'Electrical and Electronic Engineering - Top-up'
 ];
 
 export const COMMON_HALLS_AND_HOSTELS = [
-  'University Hall (Katanga)',
-  'Unity Hall (Continental / Conti)',
-  'Independence Hall',
-  'Gold Refinery Hostel',
-  'Chancellor Hall',
-  'Queen Elizabeth Hall',
-  'West End Private Hostel',
-  'Grace Villa Hostel',
-  'Peace Hostel (Off-Campus)',
-  'Premier Hostel',
-  'Royal Gate Hostel',
-  'Non-Resident / Commuter from town'
+  'KT Hall',
+  'Chambers',
+  'Gold Hall'
 ];
 
 export const INITIAL_ADMINS: DenominationAdmin[] = [
