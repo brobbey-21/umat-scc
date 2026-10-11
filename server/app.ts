@@ -1,4 +1,5 @@
-import 'dotenv/config';
+import { config } from 'dotenv';
+config({ path: ['.env.local', '.env'] });
 import express from 'express';
 import authRoutes from './routes/auth';
 import studentRoutes from './routes/students';
