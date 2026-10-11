@@ -1,7 +1,7 @@
 import { config } from 'dotenv';
 config({ path: ['.env.local', '.env'] });
 import express from 'express';
-import db from './db';
+import db, { bootError } from './db';
 import authRoutes from './routes/auth';
 import studentRoutes from './routes/students';
 import adminRoutes from './routes/admins';
@@ -38,10 +38,10 @@ app.use('/api/courses', courseRoutes);
 // Health check — pings the database so misconfiguration is visible here
 
 app.get('/api/health', async (_req, res) => {
-  if (process.env.VERCEL && !process.env.TURSO_DATABASE_URL) {
+  if (bootError) {
     return res.status(503).json({
       status: 'error',
-      database: 'TURSO_DATABASE_URL is not set in the Vercel environment',
+      database: bootError,
       timestamp: new Date().toISOString(),
     });
   }

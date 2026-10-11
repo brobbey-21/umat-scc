@@ -7,29 +7,34 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Production (Vercel): connect to Turso. Local dev: use the on-disk SQLite file.
-const tursoUrl = process.env.TURSO_DATABASE_URL;
-if (process.env.VERCEL && !tursoUrl) {
-  // Do not throw at import time — that crashes the whole serverless function
-  // with FUNCTION_INVOCATION_FAILED and hides the cause. Log it, boot anyway,
-  // and let /api/health + the JSON error handler report the real problem.
-  console.error(
-    'FATAL CONFIG: TURSO_DATABASE_URL is not set. Add TURSO_DATABASE_URL + TURSO_AUTH_TOKEN to the Vercel environment variables.'
-  );
-}
-
 const localDbPath = path.join(__dirname, '..', 'data', 'scc.db').replace(/\\/g, '/');
 
-if (!tursoUrl) {
-  const dataDir = path.dirname(localDbPath);
-  if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
-  }
-}
+// Non-null reason the real DB client could not be created, if any.
+// Surfaced by /api/health so Vercel deployments self-diagnose.
+export let bootError: string | null = null;
 
-const db: Client = createClient({
-  url: tursoUrl || `file:${localDbPath}`,
-  authToken: process.env.TURSO_AUTH_TOKEN,
-});
+let db: Client;
+
+try {
+  const tursoUrl = process.env.TURSO_DATABASE_URL;
+  if (process.env.VERCEL && !tursoUrl) {
+    throw new Error('TURSO_DATABASE_URL is not set in the Vercel environment');
+  }
+  if (!tursoUrl) {
+    const dataDir = path.dirname(localDbPath);
+    if (!fs.existsSync(dataDir)) {
+      fs.mkdirSync(dataDir, { recursive: true });
+    }
+  }
+  db = createClient({
+    url: tursoUrl || `file:${localDbPath}`,
+    authToken: process.env.TURSO_AUTH_TOKEN,
+  });
+} catch (e) {
+  bootError = e instanceof Error ? e.message : String(e);
+  console.error('DB client creation failed:', e);
+  db = createClient({ url: `file:${localDbPath}` });
+}
 
 // All schema/migration/seed work below runs at import time. A failure here
 // (e.g. dead Turso token, wrong URL) must NOT crash the serverless function —
