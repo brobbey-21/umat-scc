@@ -38,6 +38,13 @@ app.use('/api/courses', courseRoutes);
 // Health check — pings the database so misconfiguration is visible here
 
 app.get('/api/health', async (_req, res) => {
+  if (process.env.VERCEL && !process.env.TURSO_DATABASE_URL) {
+    return res.status(503).json({
+      status: 'error',
+      database: 'TURSO_DATABASE_URL is not set in the Vercel environment',
+      timestamp: new Date().toISOString(),
+    });
+  }
   try {
     await db.execute('SELECT 1');
     res.json({ status: 'ok', database: 'connected', timestamp: new Date().toISOString() });

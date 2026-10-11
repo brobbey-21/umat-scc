@@ -9,8 +9,11 @@ const __dirname = path.dirname(__filename);
 // Production (Vercel): connect to Turso. Local dev: use the on-disk SQLite file.
 const tursoUrl = process.env.TURSO_DATABASE_URL;
 if (process.env.VERCEL && !tursoUrl) {
-  throw new Error(
-    'TURSO_DATABASE_URL is not set. Create a Turso database and add TURSO_DATABASE_URL + TURSO_AUTH_TOKEN to your Vercel environment variables.'
+  // Do not throw at import time — that crashes the whole serverless function
+  // with FUNCTION_INVOCATION_FAILED and hides the cause. Log it, boot anyway,
+  // and let /api/health + the JSON error handler report the real problem.
+  console.error(
+    'FATAL CONFIG: TURSO_DATABASE_URL is not set. Add TURSO_DATABASE_URL + TURSO_AUTH_TOKEN to the Vercel environment variables.'
   );
 }
 
