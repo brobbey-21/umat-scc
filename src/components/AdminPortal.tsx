@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import {
   StudentRegistration,
   DenominationAdmin,
@@ -66,6 +66,8 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   const [searchQuery, setSearchQuery] = useState('');
   const [filterHall, setFilterHall] = useState('ALL');
   const [filterStatus, setFilterStatus] = useState<string>('ALL');
+  const [page, setPage] = useState(1);
+  const PAGE_SIZE = 8;
 
   // Add Admin Modal State
   const [isAddAdminOpen, setIsAddAdminOpen] = useState(false);
@@ -86,13 +88,17 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
   const isCentralView = selectedScope === 'central';
 
   // Filter students based on scope, search, and dropdowns
-  const visibleStudents = useMemo(() => {
+  const scopedStudents = useMemo(() => {
     return students.filter((s) => {
-      // Scope filter
       if (!isCentralView && s.denominationId !== selectedScope) {
         return false;
       }
+      return true;
+    });
+  }, [students, selectedScope, isCentralView]);
 
+  const visibleStudents = useMemo(() => {
+    return scopedStudents.filter((s) => {
       // Search query
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
@@ -118,7 +124,48 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
 
       return true;
     });
-  }, [students, selectedScope, isCentralView, searchQuery, filterHall, filterStatus]);
+  }, [scopedStudents, searchQuery, filterHall, filterStatus]);
+
+  // Quick stats for the current fellowship scope
+  const scopeStats = useMemo(() => {
+    return {
+      total: scopedStudents.length,
+      pending: scopedStudents.filter((s) => s.outreachStatus === 'New / Pending').length,
+      contacted: scopedStudents.filter((s) => s.outreachStatus === 'Contacted & Welcomed').length,
+      inGroup: scopedStudents.filter((s) => s.outreachStatus === 'Added to Fellowship Group').length
+    };
+  }, [scopedStudents]);
+
+  const hasActiveFilters =
+    Boolean(searchQuery.trim()) || filterHall !== 'ALL' || filterStatus !== 'ALL';
+
+  const clearFilters = () => {
+    setSearchQuery('');
+    setFilterHall('ALL');
+    setFilterStatus('ALL');
+  };
+
+  // Reset to first page whenever the result set can change
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery, filterHall, filterStatus, selectedScope]);
+
+  // Escape closes open modals
+  useEffect(() => {
+    if (!isAddAdminOpen && !selectedStudentForNote) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setIsAddAdminOpen(false);
+        setSelectedStudentForNote(null);
+      }
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isAddAdminOpen, selectedStudentForNote]);
+
+  const totalPages = Math.max(1, Math.ceil(visibleStudents.length / PAGE_SIZE));
+  const safePage = Math.min(page, totalPages);
+  const pageStudents = visibleStudents.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE);
 
   // Handle Export CSV
   const handleExportCSV = () => {
@@ -239,7 +286,37 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
           <div>
             {/* Filter Bar */}
             <div className="p-4 sm:p-5 border-b border-[#e6e6e0] space-y-3">
-              
+
+              {/* Quick Stats */}
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-2.5">
+                {[
+                  { key: 'ALL', label: 'Total Registered', value: scopeStats.total, accent: 'text-[#141414]' },
+                  { key: 'New / Pending', label: 'New / Pending', value: scopeStats.pending, accent: 'text-[#61615b]' },
+                  { key: 'Contacted & Welcomed', label: 'Contacted', value: scopeStats.contacted, accent: 'text-[#7e6f00]' },
+                  { key: 'Added to Fellowship Group', label: 'In Fellowship Group', value: scopeStats.inGroup, accent: 'text-[#141414]' }
+                ].map((card) => {
+                  const isActive = filterStatus === card.key;
+                  return (
+                    <button
+                      key={card.key}
+                      onClick={() => setFilterStatus(card.key)}
+                      className={`text-left p-3 rounded-xl border transition-all cursor-pointer ${
+                        isActive
+                          ? 'bg-[#fffbe0] border-[#f0e35e] shadow-sanctuary-sm'
+                          : 'bg-[#fbfbf9] border-[#e6e6e0] hover:bg-[#f4f4ee]'
+                      }`}
+                    >
+                      <div className={`text-2xl font-heading font-bold leading-none ${card.accent}`}>
+                        {card.value}
+                      </div>
+                      <div className="text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider text-[#61615b] mt-1.5">
+                        {card.label}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
               {/* Search + Export Row */}
               <div className="flex flex-col md:flex-row items-stretch md:items-center gap-3">
                 <div className="relative flex-1 min-w-[240px]">
@@ -318,17 +395,43 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     <option value="Added to Fellowship Group">Added to Fellowship Group</option>
                   </select>
                 </div>
+
+                <div className="ml-auto flex items-center gap-2.5">
+                  <span className="text-[11px] text-[#61615b] font-semibold">
+                    {visibleStudents.length === scopedStudents.length
+                      ? `${visibleStudents.length} student${visibleStudents.length === 1 ? '' : 's'}`
+                      : `${visibleStudents.length} of ${scopedStudents.length} students`}
+                  </span>
+                  {hasActiveFilters && (
+                    <button
+                      onClick={clearFilters}
+                      className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#141414] bg-[#f4f4ee] hover:bg-[#e6e6e0] border border-[#dbdbd4] rounded-lg px-2.5 py-1.5 transition-colors cursor-pointer"
+                    >
+                      <X className="w-3 h-3" />
+                      Clear filters
+                    </button>
+                  )}
+                </div>
               </div>
             </div>
 
             {/* Students Table */}
             {visibleStudents.length === 0 ? (
-              <div className="p-12 text-center space-y-2">
+              <div className="p-12 text-center space-y-3">
                 <Users className="w-8 h-8 text-[#9b9b93] mx-auto" />
                 <h3 className="font-heading text-lg text-[#141414]">No student records found</h3>
                 <p className="text-xs text-[#61615b] max-w-sm mx-auto">
                   No registered students match your current search criteria or filter scope.
                 </p>
+                {hasActiveFilters && (
+                  <button
+                    onClick={clearFilters}
+                    className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#141414] bg-[#f8f8f2] hover:bg-[#f6eb6e]/60 border border-[#f6eb6e] rounded-xl px-4 py-2 transition-colors cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                    Clear all filters
+                  </button>
+                )}
               </div>
             ) : (
               <div className="overflow-x-auto">
@@ -344,7 +447,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-[#f0f0ea] text-xs">
-                    {visibleStudents.map((student) => {
+                    {pageStudents.map((student) => {
                       const cleanPhone = student.phone.replace(/[^0-9]/g, '');
 
                       return (
@@ -462,6 +565,70 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                 </table>
               </div>
             )}
+
+            {/* Pagination */}
+            {visibleStudents.length > 0 && (
+              <div className="flex flex-col sm:flex-row items-center justify-between gap-3 px-4 sm:px-5 py-3.5 border-t border-[#e6e6e0] bg-[#fbfbf9]">
+                <p className="text-[11px] text-[#61615b] font-semibold">
+                  Showing {(safePage - 1) * PAGE_SIZE + 1}-
+                  {Math.min(safePage * PAGE_SIZE, visibleStudents.length)} of {visibleStudents.length}
+                </p>
+
+                <div className="flex items-center gap-1.5">
+                  <button
+                    onClick={() => setPage(Math.max(1, safePage - 1))}
+                    disabled={safePage <= 1}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 text-[11px] font-semibold text-[#141414] bg-[#FFFFFF] border border-[#dbdbd4] rounded-lg transition-colors enabled:hover:bg-[#f4f4ee] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                  >
+                    <ArrowLeft className="w-3 h-3" />
+                    <span>Prev</span>
+                  </button>
+
+                  <div className="flex items-center gap-1">
+                    {Array.from({ length: totalPages }).map((_, i) => {
+                      const pageNum = i + 1;
+                      if (
+                        totalPages > 7 &&
+                        pageNum !== 1 &&
+                        pageNum !== totalPages &&
+                        Math.abs(pageNum - safePage) > 2
+                      ) {
+                        if (Math.abs(pageNum - safePage) === 3) {
+                          return (
+                            <span key={pageNum} className="px-1 text-[11px] text-[#9b9b93]">
+                              ...
+                            </span>
+                          );
+                        }
+                        return null;
+                      }
+                      return (
+                        <button
+                          key={pageNum}
+                          onClick={() => setPage(pageNum)}
+                          className={`w-7 h-7 rounded-lg text-[11px] font-semibold transition-colors cursor-pointer ${
+                            pageNum === safePage
+                              ? 'bg-[#141414] text-white'
+                              : 'text-[#61615b] hover:bg-[#f4f4ee]'
+                          }`}
+                        >
+                          {pageNum}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <button
+                    onClick={() => setPage(Math.min(totalPages, safePage + 1))}
+                    disabled={safePage >= totalPages}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 text-[11px] font-semibold text-[#141414] bg-[#FFFFFF] border border-[#dbdbd4] rounded-lg transition-colors enabled:hover:bg-[#f4f4ee] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer"
+                  >
+                    <span>Next</span>
+                    <ArrowRight className="w-3 h-3" />
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         )}
 
@@ -505,7 +672,15 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                         </span>
                       )}
                       <button
-                        onClick={() => onDeleteAdmin(admin.id)}
+                        onClick={() => {
+                          if (
+                            window.confirm(
+                              `Remove ${admin.adminName} as ${admin.fellowshipCode} admin?`
+                            )
+                          ) {
+                            onDeleteAdmin(admin.id);
+                          }
+                        }}
                         title="Remove Admin"
                         className="text-[#9b9b93] hover:text-[#BA1A1A] p-1 rounded"
                       >
@@ -644,7 +819,7 @@ export const AdminPortal: React.FC<AdminPortalProps> = ({
                   >
                     {COUNTRY_CODES.map((c) => (
                       <option key={c.code} value={c.code}>
-                        {c.flag} {c.code}
+                        {c.iso} {c.code}
                       </option>
                     ))}
                     </select>
